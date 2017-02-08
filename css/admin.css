@@ -1,0 +1,25 @@
+TD.zenodo_admin_left {
+	width: 150px;
+	text-align: right;
+	font-weight: bold;
+	padding-right: 15px;
+}
+
+TR.zenodo_admin_head, TR.zenodo_admin_head:hover {
+	margin-top: 12px;
+	width: 600px;
+	background: #ddd;
+}
+
+TD.zenodo_moremargin {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+TD.zenodo_admin_head {
+	font-weight: bold;
+	text-align: right;
+	padding: 4px;
+	padding-right: 30px;
+	font-style: italic;
+}
