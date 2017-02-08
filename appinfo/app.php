@@ -1,7 +1,7 @@
- <?php
+<?php
 
 /**
- * Zenodo - based on files_zenodo from Lars Naesbye Christensen 
+ * Zenodo - based on files_zenodo from Lars Naesbye Christensen
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.

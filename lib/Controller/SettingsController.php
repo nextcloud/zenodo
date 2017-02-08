@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Zenodo - based on files_zenodo from Lars Naesbye Christensen 
+ * Zenodo - based on files_zenodo from Lars Naesbye Christensen
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
@@ -32,47 +32,44 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IRequest;
 
-class SettingsController extends Controller
-{
+class SettingsController extends Controller {
 
-    private $configService;
+	private $configService;
 
-    private $miscService;
+	private $miscService;
 
-    public function __construct($appName, IRequest $request, ConfigService $configService, $miscService)
-    {
-        parent::__construct($appName, $request);
-        $this->configService = $configService;
-        $this->miscService = $miscService;
-    }
-    
-    //
-    // Admin
-    //
-    
-    /**
-     * @NoCSRFRequired
-     */
-    public function admin()
-    {
-        return new TemplateResponse($this->appName, 'settings.admin', [], 'blank');
-    }
+	public function __construct(
+		$appName, IRequest $request, ConfigService $configService, $miscService
+	) {
+		parent::__construct($appName, $request);
+		$this->configService = $configService;
+		$this->miscService = $miscService;
+	}
 
-    public function getZenodoInfo()
-    {
-        $params = [
-            'tokenSandbox' => $this->configService->getAppValue('tokenSandbox'),
-            'tokenProduction' => $this->configService->getAppValue('tokenProduction')
-        ];
-        
-        return $params;
-    }
+	//
+	// Admin
+	//
 
-    public function setZenodoInfo($token_sandbox, $token_production)
-    {
-        $this->configService->setAppValue('tokenSandbox', $token_sandbox);
-        $this->configService->setAppValue('tokenProduction', $token_production);
-        
-        return $this->getZenodoInfo();
-    }
+	/**
+	 * @NoCSRFRequired
+	 */
+	public function admin() {
+		return new TemplateResponse($this->appName, 'settings.admin', [], 'blank');
+	}
+
+	public function getZenodoInfo() {
+		$params = [
+			'tokenSandbox'    => $this->configService->getAppValue('tokenSandbox'),
+			'tokenProduction' => $this->configService->getAppValue('tokenProduction')
+		];
+
+		return $params;
+	}
+
+	public function setZenodoInfo($token_sandbox, $token_production) {
+		$this->configService->setAppValue('tokenSandbox', $token_sandbox);
+		$this->configService->setAppValue('tokenProduction', $token_production);
+
+		return $this->getZenodoInfo();
+	}
 }

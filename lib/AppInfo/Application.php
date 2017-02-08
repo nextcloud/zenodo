@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Zenodo - based on files_zenodo from Lars Naesbye Christensen 
+ * Zenodo - based on files_zenodo from Lars Naesbye Christensen
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
@@ -33,56 +33,75 @@ use \OCA\Zenodo\Service\MiscService;
 use OCP\AppFramework\App;
 use OCP\Util;
 
-class Application extends App
-{
+class Application extends App {
 
-    /**
-     *
-     * @param array $params            
-     */
-    public function __construct(array $params = array())
-    {
-        parent::__construct('zenodo', $params);
-        $container = $this->getContainer();
-        
-        /**
-         * Controllers
-         */
-        $container->registerService('MiscService', function ($c) {
-            return new MiscService($c->query('Logger'), $c->query('AppName'));
-        });
-        
-        $container->registerService('ConfigService', function ($c) {
-            return new ConfigService($c->query('AppName'), $c->query('CoreConfig'), $c->query('UserId'), $c->query('MiscService'));
-        });
-        
-        $container->registerService('SettingsController', function ($c) {
-            return new SettingsController($c->query('AppName'), $c->query('Request'), $c->query('ConfigService'), $c->query('MiscService'));
-        });
-        
-        /**
-         * Core
-         */
-        $container->registerService('Logger', function ($c) {
-            return $c->query('ServerContainer')
-                ->getLogger();
-        });
-        $container->registerService('CoreConfig', function ($c) {
-            return $c->query('ServerContainer')
-                ->getConfig();
-        });
-        
-        $container->registerService('UserId', function ($c) {
-            $user = $c->query('ServerContainer')
-                ->getUserSession()
-                ->getUser();
-            return is_null($user) ? '' : $user->getUID();
-        });
-    }
+	/**
+	 *
+	 * @param array $params
+	 */
+	public function __construct(array $params = array()) {
+		parent::__construct('zenodo', $params);
+		$container = $this->getContainer();
 
-    public function registerSettingsAdmin()
-    {
-        \OCP\App::registerAdmin($this->getContainer()->query('AppName'), 'lib/admin');
-    }
+		/**
+		 * Controllers
+		 */
+		$container->registerService(
+			'MiscService', function ($c) {
+			return new MiscService($c->query('Logger'), $c->query('AppName'));
+		}
+		);
+
+		$container->registerService(
+			'ConfigService', function ($c) {
+			return new ConfigService(
+				$c->query('AppName'), $c->query('CoreConfig'), $c->query('UserId'),
+				$c->query('MiscService')
+			);
+		}
+		);
+
+		$container->registerService(
+			'SettingsController', function ($c) {
+			return new SettingsController(
+				$c->query('AppName'), $c->query('Request'), $c->query('ConfigService'),
+				$c->query('MiscService')
+			);
+		}
+		);
+
+		/**
+		 * Core
+		 */
+		$container->registerService(
+			'Logger', function ($c) {
+			return $c->query('ServerContainer')
+					 ->getLogger();
+		}
+		);
+		$container->registerService(
+			'CoreConfig', function ($c) {
+			return $c->query('ServerContainer')
+					 ->getConfig();
+		}
+		);
+
+		$container->registerService(
+			'UserId', function ($c) {
+			$user = $c->query('ServerContainer')
+					  ->getUserSession()
+					  ->getUser();
+
+			return is_null($user) ? '' : $user->getUID();
+		}
+		);
+	}
+
+	public function registerSettingsAdmin() {
+		\OCP\App::registerAdmin(
+			$this->getContainer()
+				 ->query('AppName'), 'lib/admin'
+		);
+	}
 }
 

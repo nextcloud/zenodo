@@ -26,18 +26,18 @@
  *
  */
 return [
-    'routes' => [
-        [
-            'name' => 'settings#getZenodoInfo',
-            'url' => 'ajax/settings/getZenodoInfo.php',
-            'verb' => 'POST'
-        ],
-        [
-            'name' => 'settings#setZenodoInfo',
-            'url' => 'ajax/settings/setZenodoInfo.php',
-            'verb' => 'POST'
-        ]
-    ]
+	'routes' => [
+		[
+			'name' => 'settings#getZenodoInfo',
+			'url'  => 'ajax/settings/getZenodoInfo.php',
+			'verb' => 'POST'
+		],
+		[
+			'name' => 'settings#setZenodoInfo',
+			'url'  => 'ajax/settings/setZenodoInfo.php',
+			'verb' => 'POST'
+		]
+	]
 ];
 
 

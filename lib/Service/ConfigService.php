@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Zenodo - based on files_zenodo from Lars Naesbye Christensen 
+ * Zenodo - based on files_zenodo from Lars Naesbye Christensen
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
@@ -30,126 +30,127 @@ namespace OCA\Zenodo\Service;
 use \OCA\Zenodo\Controller\SettingsController;
 use OCP\IConfig;
 
-class ConfigService
-{
+class ConfigService {
 
-    private $defaults = [
-        'configured' => '0'
-    ];
+	private $defaults = [
+		'configured' => '0'
+	];
 
-    private $appName;
+	private $appName;
 
-    private $config;
+	private $config;
 
-    private $miscService;
+	private $miscService;
 
-    public function __construct($appName, IConfig $config, $userId, $miscService)
-    {
-        $this->appName = $appName;
-        $this->config = $config;
-        $this->userId = $userId;
-        $this->miscService = $miscService;
-    }
+	public function __construct($appName, IConfig $config, $userId, $miscService) {
+		$this->appName = $appName;
+		$this->config = $config;
+		$this->userId = $userId;
+		$this->miscService = $miscService;
+	}
 
-    /**
-     * Get a value by key
-     *
-     * @param string $key            
-     * @return string
-     */
-    public function getAppValue($key)
-    {
-        $defaultValue = null;
-        if (array_key_exists($key, $this->defaults))
-            $defaultValue = $this->defaults[$key];
-        return $this->config->getAppValue($this->appName, $key, $defaultValue);
-    }
+	/**
+	 * Get a value by key
+	 *
+	 * @param string $key
+	 *
+	 * @return string
+	 */
+	public function getAppValue($key) {
+		$defaultValue = null;
+		if (array_key_exists($key, $this->defaults)) {
+			$defaultValue = $this->defaults[$key];
+		}
 
-    /**
-     * Set a value by key
-     *
-     * @param string $key            
-     * @param string $value            
-     * @return string
-     */
-    public function setAppValue($key, $value)
-    {
-        return $this->config->setAppValue($this->appName, $key, $value);
-    }
+		return $this->config->getAppValue($this->appName, $key, $defaultValue);
+	}
 
-    /**
-     * remove a key
-     *
-     * @param string $key            
-     * @return string
-     */
-    public function deleteAppValue($key)
-    {
-        return $this->config->deleteAppValue($this->appName, $key);
-    }
+	/**
+	 * Set a value by key
+	 *
+	 * @param string $key
+	 * @param string $value
+	 *
+	 * @return string
+	 */
+	public function setAppValue($key, $value) {
+		return $this->config->setAppValue($this->appName, $key, $value);
+	}
 
-    /**
-     * Get a user value by key
-     *
-     * @param string $key            
-     * @return string
-     */
-    public function getUserValue($key)
-    {
-        return $this->config->getUserValue($this->userId, $this->appName, $key);
-    }
+	/**
+	 * remove a key
+	 *
+	 * @param string $key
+	 *
+	 * @return string
+	 */
+	public function deleteAppValue($key) {
+		return $this->config->deleteAppValue($this->appName, $key);
+	}
 
-    /**
-     * Set a user value by key
-     *
-     * @param string $key            
-     * @param string $value            
-     * @return string
-     */
-    public function setUserValue($key, $value)
-    {
-        return $this->config->setUserValue($this->userId, $this->appName, $key, $value);
-    }
+	/**
+	 * Get a user value by key
+	 *
+	 * @param string $key
+	 *
+	 * @return string
+	 */
+	public function getUserValue($key) {
+		return $this->config->getUserValue($this->userId, $this->appName, $key);
+	}
 
-    /**
-     * Get a user value by key and user
-     *
-     * @param string $userId            
-     * @param string $key            
-     * @return string
-     */
-    public function getValueForUser($userId, $key)
-    {
-        return $this->config->getUserValue($userId, $this->appName, $key);
-    }
+	/**
+	 * Set a user value by key
+	 *
+	 * @param string $key
+	 * @param string $value
+	 *
+	 * @return string
+	 */
+	public function setUserValue($key, $value) {
+		return $this->config->setUserValue($this->userId, $this->appName, $key, $value);
+	}
 
-    /**
-     * Set a user value by key
-     *
-     * @param string $userId            
-     * @param string $key            
-     * @param string $value            
-     * @return string
-     */
-    public function setValueForUser($userId, $key, $value)
-    {
-        return $this->config->setUserValue($userId, $this->appName, $key, $value);
-    }
+	/**
+	 * Get a user value by key and user
+	 *
+	 * @param string $userId
+	 * @param string $key
+	 *
+	 * @return string
+	 */
+	public function getValueForUser($userId, $key) {
+		return $this->config->getUserValue($userId, $this->appName, $key);
+	}
 
-    /**
-     * return the cloud version.
-     * if $complete is true, return a string x.y.z
-     *
-     * @param boolean $complete            
-     * @return string|integer
-     */
-    public function getCloudVersion($complete = false)
-    {
-        $ver = \OCP\Util::getVersion();
-        
-        if ($complete)
-            return implode('.', $ver);
-        
-        return $ver[0];
-    }
+	/**
+	 * Set a user value by key
+	 *
+	 * @param string $userId
+	 * @param string $key
+	 * @param string $value
+	 *
+	 * @return string
+	 */
+	public function setValueForUser($userId, $key, $value) {
+		return $this->config->setUserValue($userId, $this->appName, $key, $value);
+	}
+
+	/**
+	 * return the cloud version.
+	 * if $complete is true, return a string x.y.z
+	 *
+	 * @param boolean $complete
+	 *
+	 * @return string|integer
+	 */
+	public function getCloudVersion($complete = false) {
+		$ver = \OCP\Util::getVersion();
+
+		if ($complete) {
+			return implode('.', $ver);
+		}
+
+		return $ver[0];
+	}
 }
