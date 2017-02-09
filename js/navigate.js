@@ -2,7 +2,13 @@ $(document).ready(function () {
 
 	var zenodoActions = {
 
+		currentFilename: '',
+
 		init: function () {
+
+			var self = this;
+			self.currentFilename = '';
+			self.published = false;
 
 			// add a div to the <body>
 			if (!$('#zenodo_dialog').length)
@@ -25,15 +31,22 @@ $(document).ready(function () {
 
 		showPopup: function (filename, context) {
 
+			if ($('#zenodo_end').length)
+				$('#zenodo_end').remove();
+
 			if ($('#zenodo_dialog_buttons').length)
 				$('#zenodo_dialog_buttons').remove();
+
+			self.currentFilename = filename;
+			self.published = false;
 
 			$.get(OC.filePath('zenodo', 'ajax',
 				'getZenodoDialog.php'), {}, zenodoActions.fillPopup);
 
 			$('#zenodo_dialog').attr('title', 'Zenodo - ' + filename);
 			$('#zenodo_dialog').dialog();
-			$('#zenodo_dialog').parent().css('width', '800px').css('height', '600px').css('top',
+			// $('#zenodo_dialog').css('width', '700px').css('height', '400px');
+			$('#zenodo_dialog').parent().css('width', '700px').css('height', '500px').css('top',
 				'100px').css('z-index', '9999');
 
 			$('#zenodo_dialog').parent().css('box-shadow', '0px 0px 0px #5151514D');
@@ -45,6 +58,10 @@ $(document).ready(function () {
 		},
 
 		fillPopup: function (response) {
+
+			if (self.published)
+				return;
+
 			$('#zenodo_dialog').html(response);
 
 			zenodoActions.initDialog();
@@ -59,9 +76,8 @@ $(document).ready(function () {
 						'<div id="zenodo_dialog_production" class="zenodo_dialog_button">Publish (production)</div>').fadeIn(
 					400);
 
-				$('#zenodo_dialog_close').on('mousedown', function () {
-					$('#zenodo_dialog').dialog('close');
-				});
+				zenodoActions.enableButtons(true);
+
 				$('#zenodo_dialog').parent().animate(
 					{boxShadow: "3px 3px 5px rgba(81, 81, 81, 0.40)"});
 
@@ -69,27 +85,77 @@ $(document).ready(function () {
 		},
 
 
+		enableButtons: function (enabled) {
+
+			if (self.published)
+				return;
+
+			if (enabled) {
+
+				$('#zenodo_dialog_buttons').fadeTo(200, 1);
+
+				$('#zenodo_dialog_close').on('click', function () {
+					zenodoActions.enableButtons(false);
+					$('#zenodo_dialog').dialog('close');
+				});
+				$('#zenodo_dialog_sandbox').on('click', function () {
+					zenodoActions.enableButtons(false);
+					zenodoActions.publish(false);
+				});
+				$('#zenodo_dialog_production').on('click', function () {
+					zenodoActions.enableButtons(false);
+					zenodoActions.publish(true);
+				});
+
+			} else {
+				$('#zenodo_dialog_buttons').fadeTo(200, 0.3);
+				$('#zenodo_dialog_buttons').children().off('click');
+			}
+
+		},
+
 		initDialog: function () {
-			$('#zendialog_publicationtype').hide();
-			$('#zendialog_imagetype').hide();
 
-			$('#zendialog_uploadtype').change(function () {
-				if ($('#zendialog_uploadtype option:selected').val() == "publication")
-					$('#zendialog_imagetype').fadeOut(200, function () {
-						$('#zendialog_publicationtype').fadeIn(200);
-					});
-				else
-					$('#zendialog_publicationtype').fadeOut(200);
+			if (self.published)
+				return;
 
-				if ($('#zendialog_uploadtype option:selected').val() == "image")
-					$('#zendialog_publicationtype').fadeOut(200, function () {
-						$('#zendialog_imagetype').fadeIn(200);
-					});
-				else
-					$('#zendialog_imagetype').fadeOut(200);
-			});
+			zenodoDialog.init();
+		},
+
+
+		publish: function (prod) {
+
+			if (self.published)
+				return;
+
+			var data = {
+				filename: self.currentFilename,
+				metadata: zenodoDialog.metadata(),
+				production: prod
+			};
+
+			$.post(OC.filePath('zenodo', 'ajax',
+				'publishToZenodo.php'), data, zenodoActions.result);
+		},
+
+		result: function (response) {
+			//	window.alert("response: " + response);
+			if (response.published) {
+				zenodoActions.enableButtons(true);
+
+				self.published = true;
+				$('#zenodo_dialog_sandbox').fadeTo(200, 0.3);
+				$('#zenodo_dialog_sandbox').off('click');
+				$('#zenodo_dialog_production').fadeTo(200, 0.3);
+				$('#zenodo_dialog_production').off('click');
+
+				$('#zendialog_content').fadeOut(400, function () {
+					$('#zenodo_dialog').append('<div id="zenodo_end">Your file has been published to Zenodo.org</div>');
+
+				});
+			}
+
 		}
-
 	};
 
 	zenodoActions.init();
