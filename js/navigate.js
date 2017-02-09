@@ -33,7 +33,8 @@ $(document).ready(function () {
 
 			$('#zenodo_dialog').attr('title', 'Zenodo - ' + filename);
 			$('#zenodo_dialog').dialog();
-			$('#zenodo_dialog').parent().css('width', '600px').css('height', '400px');
+			$('#zenodo_dialog').parent().css('width', '800px').css('height', '600px').css('top',
+				'100px').css('z-index', '9999');
 
 			$('#zenodo_dialog').parent().css('box-shadow', '0px 0px 0px #5151514D');
 			$('#zenodo_dialog').parent().css('moz-box-shadow', '0px 0px 0px #5151514D');
@@ -46,13 +47,16 @@ $(document).ready(function () {
 		fillPopup: function (response) {
 			$('#zenodo_dialog').html(response);
 
+			zenodoActions.initDialog();
 
 			setTimeout(function () {
 				$('#zenodo_dialog').parent().append('<div id="zenodo_dialog_buttons"></div>');
 				$('#zenodo_dialog_buttons').hide();
 				$('#zenodo_dialog_buttons').append(
 					'<div id="zenodo_dialog_close" class="zenodo_dialog_button">Close</div>').append(
-					'<div id="zenodo_dialog_send" class="zenodo_dialog_button">Send</div>').fadeIn(
+					'<div id="zenodo_dialog_sandbox" class="zenodo_dialog_button">Publish (sandbox)</div>')
+					.append(
+						'<div id="zenodo_dialog_production" class="zenodo_dialog_button">Publish (production)</div>').fadeIn(
 					400);
 
 				$('#zenodo_dialog_close').on('mousedown', function () {
@@ -61,9 +65,30 @@ $(document).ready(function () {
 				$('#zenodo_dialog').parent().animate(
 					{boxShadow: "3px 3px 5px rgba(81, 81, 81, 0.40)"});
 
-			}, 1000);
-		}
+			}, 500);
+		},
 
+
+		initDialog: function () {
+			$('#zendialog_publicationtype').hide();
+			$('#zendialog_imagetype').hide();
+
+			$('#zendialog_uploadtype').change(function () {
+				if ($('#zendialog_uploadtype option:selected').val() == "publication")
+					$('#zendialog_imagetype').fadeOut(200, function () {
+						$('#zendialog_publicationtype').fadeIn(200);
+					});
+				else
+					$('#zendialog_publicationtype').fadeOut(200);
+
+				if ($('#zendialog_uploadtype option:selected').val() == "image")
+					$('#zendialog_publicationtype').fadeOut(200, function () {
+						$('#zendialog_imagetype').fadeIn(200);
+					});
+				else
+					$('#zendialog_imagetype').fadeOut(200);
+			});
+		}
 
 	};
 

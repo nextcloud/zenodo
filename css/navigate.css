@@ -16,15 +16,20 @@ BUTTON.ui-dialog-titlebar-close {
 
 #zenodo_dialog_close {
 	background: #ececec;
+	width: 34%;
 }
 
-#zenodo_dialog_send {
+#zenodo_dialog_sandbox {
 	background: #e4e4e4;
+}
+
+#zenodo_dialog_production {
+	background: #dcdcdc;
 }
 
 DIV.zenodo_dialog_button {
 	display: inline-block;
-	width: 50%;
+	width: 33%;
 	height: 50px;
 	text-align: center;
 	vertical-align: center;
@@ -38,3 +43,12 @@ DIV.zenodo_dialog_shadow {
 	-webkit-box-shadow: 3px 3px 5px #5151514D;
 	box-shadow: 3px 3px 5px #5151514D;
 }
+
+
+TD.zendialog_left {
+	font-weight: bold;
+	width: 180px;
+	text-align: right;
+	background: #eee;
+}
+
