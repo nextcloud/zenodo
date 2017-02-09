@@ -28,9 +28,11 @@
 namespace OCA\Zenodo\Controller;
 
 use \OCA\Zenodo\Service\ConfigService;
+use OCA\Zenodo\Service\MiscService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IRequest;
+use Punic\Misc;
 
 class SettingsController extends Controller {
 
@@ -39,7 +41,7 @@ class SettingsController extends Controller {
 	private $miscService;
 
 	public function __construct(
-		$appName, IRequest $request, ConfigService $configService, $miscService
+		$appName, IRequest $request, ConfigService $configService, MiscService $miscService
 	) {
 		parent::__construct($appName, $request);
 		$this->configService = $configService;
@@ -59,16 +61,16 @@ class SettingsController extends Controller {
 
 	public function getZenodoInfo() {
 		$params = [
-			'tokenSandbox'    => $this->configService->getAppValue('tokenSandbox'),
-			'tokenProduction' => $this->configService->getAppValue('tokenProduction')
+			'tokenSandbox'    => $this->configService->getAppValue(ConfigService::TOKEN_SANDBOX),
+			'tokenProduction' => $this->configService->getAppValue(ConfigService::TOKEN_PRODUCTION)
 		];
 
 		return $params;
 	}
 
 	public function setZenodoInfo($token_sandbox, $token_production) {
-		$this->configService->setAppValue('tokenSandbox', $token_sandbox);
-		$this->configService->setAppValue('tokenProduction', $token_production);
+		$this->configService->setAppValue(ConfigService::TOKEN_SANDBOX, $token_sandbox);
+		$this->configService->setAppValue(ConfigService::TOKEN_PRODUCTION, $token_production);
 
 		return $this->getZenodoInfo();
 	}

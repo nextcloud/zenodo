@@ -36,13 +36,17 @@ class ConfigService {
 		'configured' => '0'
 	];
 
+	const TOKEN_SANDBOX = 'tokenSandbox';
+
+	const TOKEN_PRODUCTION = 'tokenProduction';
+
 	private $appName;
 
 	private $config;
 
 	private $miscService;
 
-	public function __construct($appName, IConfig $config, $userId, $miscService) {
+	public function __construct($appName, IConfig $config, $userId, MiscService $miscService) {
 		$this->appName = $appName;
 		$this->config = $config;
 		$this->userId = $userId;
