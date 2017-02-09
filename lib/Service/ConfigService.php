@@ -62,6 +62,7 @@ class ConfigService {
 	 */
 	public function getAppValue($key) {
 		$defaultValue = null;
+
 		if (array_key_exists($key, $this->defaults)) {
 			$defaultValue = $this->defaults[$key];
 		}

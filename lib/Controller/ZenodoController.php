@@ -69,7 +69,7 @@ class ZenodoController extends Controller {
 	 */
 	public function publishToZenodo($filename, $metadata, $production) {
 
-
+		$error = '';
 		$published = false;
 		if ($this->apiService->init($production)) {
 			$this->apiService->create_deposition($metadata);
@@ -81,7 +81,7 @@ class ZenodoController extends Controller {
 		}
 
 		$response = array(
-			'error'     => ($error) ? $error : null,
+			'error'     => ($error !== '') ? $error : null,
 			'published' => $published
 		);
 
