@@ -74,30 +74,28 @@
 			<td class="zendialog_left">Access right:</td>
 			<td>
 				<select id="zendialog_accessright">
+					<option value=""></option>
 					<option value="open">Open</option>
 					<option value="embargoed">Embargoed</option>
 					<option value="restricted">Restricted</option>
 					<option value="closed">Closed</option>
 				</select>
-			</td>
-		</tr>
 
-		<tr>
-			<td class="zendialog_left">License:</td>
-			<td><select id="zendialog_license">
+				<select id="zendialog_license">
+					<option value="">Choose a License</option>
 					<option value="Open Access">Open Access</option>
 					<option value="Creative Commons">Creative Commons</option>
 				</select>
 			</td>
 		</tr>
-		<tr>
+		<tr id="zendialog_display_embargodate">
 			<td class="zendialog_left">Embargo date:</td>
 			<td><input type="date" id="zendialog_embargodate">
 			</td>
 		</tr>
-		<tr>
+		<tr id="zendialog_display_accesscondition">
 			<td class="zendialog_left">Access Conditions:</td>
-			<td>
+			<td><textarea></textarea>
 			</td>
 		</tr>
 
