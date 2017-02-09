@@ -4,32 +4,42 @@ namespace OCA\Zenodo\Model;
 
 class iError {
 
-	const FIELD_ISSUE = 1001;
+	const TOKEN_MISSING = 1001;
 
-	private $message;
+	private $messages = array();
 	private $code;
 
 	function __construct() {
 	}
 
 	public function setMessage($message) {
-		$this->message = $message;
+		array_push($this->messages, $message);
 
 		return $this;
 	}
 
-	public function getMessage() {
-		return $this->message;
+	public function getMessages() {
+		return $this->messages;
 	}
 
 
 	public function setCode($code) {
 		$this->code = $code;
+
 		return $this;
 	}
 
 	public function getCode() {
 		return $this->code;
 	}
+
+
+	public function toArray() {
+		return array(
+			'code'     => $this->getCode(),
+			'messages' => $this->getMessages()
+		);
+	}
+
 
 }

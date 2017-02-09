@@ -56,7 +56,6 @@ DIV.zenodo_dialog_shadow {
 #zenodo_error {
 	width: 100%;
 	text-align: center;
-	height: 20px;
 	font-style: italic;
 	color: #f33;
 }

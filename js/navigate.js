@@ -49,7 +49,7 @@ $(document).ready(function () {
 			$('#zenodo_dialog').attr('title', 'Zenodo - ' + filename);
 			$('#zenodo_dialog').dialog();
 			// $('#zenodo_dialog').css('width', '700px').css('height', '400px');
-			$('#zenodo_dialog').parent().css('width', '700px').css('height', '550px').css('top',
+			$('#zenodo_dialog').parent().css('width', '700px').css('height', '600px').css('top',
 				'100px').css('z-index', '9999');
 
 			$('#zenodo_dialog').parent().css('box-shadow', '0px 0px 0px #5151514D');
@@ -163,7 +163,9 @@ $(document).ready(function () {
 			else {
 				zenodoActions.enableButtons(true);
 				$('#zenodo_dialog').prepend('<div id="zenodo_error"></div>');
-				$('#zenodo_error').text(response.error);
+				response.error.messages.forEach(function (item) {
+					$('#zenodo_error').append(item + '<br />');
+				});
 			}
 
 		}
