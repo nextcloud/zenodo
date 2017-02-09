@@ -36,9 +36,9 @@ class ConfigService {
 		'configured' => '0'
 	];
 
-	const TOKEN_SANDBOX = 'tokenSandbox';
+	const ZENODO_TOKEN_SANDBOX = 'tokenSandbox';
 
-	const TOKEN_PRODUCTION = 'tokenProduction';
+	const ZENODO_TOKEN_PRODUCTION = 'tokenProduction';
 
 	private $appName;
 
