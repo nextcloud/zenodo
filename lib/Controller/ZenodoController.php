@@ -27,6 +27,7 @@
  */
 namespace OCA\Zenodo\Controller;
 
+use \OCA\Zenodo\Model\iError;
 use \OCA\Zenodo\Service\ConfigService;
 use OCA\Zenodo\Service\MiscService;
 use OCA\Zenodo\Service\ApiService;
@@ -69,19 +70,16 @@ class ZenodoController extends Controller {
 	 */
 	public function publishToZenodo($filename, $metadata, $production) {
 
-		$error = '';
+		$iError = new iError();
 		$published = false;
-		if ($this->apiService->init($production)) {
-			$this->apiService->create_deposition($metadata);
-
+		if ($this->apiService->init(($production === 'true') ? true : false, $iError)
+			&& $this->apiService->create_deposition(array('metadata' => $metadata), $iError)
+		) {
 			$published = true;
-		} else {
-			$error =
-				'No token defined for this operation; please contact your Nextcloud administrator';
 		}
 
 		$response = array(
-			'error'     => ($error !== '') ? $error : null,
+			'error'     => $iError->toArray(),
 			'published' => $published
 		);
 

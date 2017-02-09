@@ -27,6 +27,7 @@
  */
 namespace OCA\Zenodo\Service;
 
+use \OCA\Zenodo\Model\iError;
 use \OCA\Zenodo\Service\ConfigService;
 use OCA\Zenodo\Service\MiscService;
 use OCP\AppFramework\Controller;
@@ -38,8 +39,8 @@ class ApiService {
 	const ZENODO_DOMAIN_SANDBOX = 'https://sandbox.zenodo.org/';
 	const ZENODO_DOMAIN_PRODUCTION = 'https://zenodo.org/';
 
-	const ZENODO_API_DEPOSITIONS_CREATE = 'api/deposit/depositions';
-	const ZENODO_API_DEPOSITIONS_FILES_UPLOAD = 'api/deposit/depositions/%ID%/files';
+	const ZENODO_API_DEPOSITIONS_CREATE = 'api/deposit/depositions?';
+	const ZENODO_API_DEPOSITIONS_FILES_UPLOAD = 'api/deposit/depositions/%ID%/files?';
 
 	private $configService;
 	private $miscService;
@@ -53,12 +54,21 @@ class ApiService {
 	}
 
 
-	public function init($production) {
+	public function init($production, &$iError = null) {
+
+		if ($iError === null) {
+			$iError = new $iError();
+		}
 
 		$this->production = $production;
-
 		$this->initToken();
+
 		if ($this->token === '') {
+			$iError->setCode(iError::TOKEN_MISSING)
+				   ->setMessage(
+					   'No token defined for this operation; please contact your Nextcloud administrator'
+				   );
+
 			return false;
 		}
 
@@ -74,7 +84,9 @@ class ApiService {
 	}
 
 	private function initToken() {
-		if ($this->production) {
+
+		if ($this->production === true) {
+			$this->miscService->log("==== PROD");
 			$this->token =
 				$this->configService->getAppValue(ConfigService::ZENODO_TOKEN_PRODUCTION);
 		} else {
@@ -83,20 +95,65 @@ class ApiService {
 	}
 
 
-	public static function generateUrl($from, $production) {
+	private function generateUrl($path) {
 
-		$url = '';
-
-		return $url;
-	}
-
-	public function create_deposition($metadata) {
-
-		if (!$this->configured) {
+		if (!$this->configured()) {
 			return false;
 		}
 
-		return true;
+		if ($this->production === true) {
+			$url = self::ZENODO_DOMAIN_PRODUCTION;
+		} else {
+			$url = self::ZENODO_DOMAIN_SANDBOX;
+		}
+
+		return sprintf("%s%saccess_token=%s", $url, $path, $this->token);
+	}
+
+	public function create_deposition($metadata, &$iError = null) {
+
+		if ($iError === null) {
+			$iError = new $iError();
+		}
+
+		if (!$this->configured()) {
+			return false;
+		}
+
+		$url = $this->generateURl(self::ZENODO_API_DEPOSITIONS_CREATE);
+		$json = json_encode($metadata);
+		$result = self::curlIt($url, $json, $iError);
+
+		$this->miscService->log("_METADATA: " . var_export($metadata, true));
+		$this->miscService->log("_RESULT: " . var_export($result, true));
+
+		if ($result->status === 200) {
+			return true;
+		}
+
+		$iError->setCode($result->status);
+		if (sizeof($result->errors) > 0) {
+			foreach ($result->errors as $error) {
+				$iError->setMessage($error->field . ' - ' . $error->message);
+			}
+		}
+
+		return false;
+	}
+
+	public static function curlIt($url, $json) {
+
+		$curl = curl_init($url);
+		curl_setopt($curl, CURLOPT_HEADER, false);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt(
+			$curl, CURLOPT_HTTPHEADER,
+			array("Content-type: application/json")
+		);
+		curl_setopt($curl, CURLOPT_POST, true);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $json);
+
+		return json_decode(curl_exec($curl));
 	}
 
 }
