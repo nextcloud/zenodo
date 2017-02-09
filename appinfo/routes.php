@@ -38,10 +38,17 @@ return [
 			'verb' => 'POST'
 		],
 		[
+			'name' => 'Zenodo#publishToZenodo',
+			'url'  => 'ajax/publishToZenodo.php',
+			'verb' => 'POST'
+		],
+		[
 			'name' => 'Zenodo#dialogZenodo',
 			'url'  => 'ajax/getZenodoDialog.php',
 			'verb' => 'GET'
 		]
+
+
 
 
 

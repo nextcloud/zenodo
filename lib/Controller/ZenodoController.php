@@ -58,4 +58,22 @@ class ZenodoController extends Controller {
 		return new TemplateResponse($this->appName, 'dialog', [], 'blank');
 	}
 
+
+	/**
+	 * @NoCSRFRequired
+	 * @NoAdminRequired
+	 */
+	public function publishToZenodo($filename, $metadata, $production) {
+
+
+		$this->miscService->log(
+			"_____" . var_export($metadata, true) . " __ " . $filename . "_ " . $production
+		);
+
+		$response = array(
+			'published' => true
+		);
+
+		return $response;
+	}
 }
