@@ -34,6 +34,9 @@ $(document).ready(function () {
 			if ($('#zenodo_end').length)
 				$('#zenodo_end').remove();
 
+			if ($('#zenodo_error').length)
+				$('#zenodo_error').remove();
+
 			if ($('#zenodo_dialog_buttons').length)
 				$('#zenodo_dialog_buttons').remove();
 
@@ -46,7 +49,7 @@ $(document).ready(function () {
 			$('#zenodo_dialog').attr('title', 'Zenodo - ' + filename);
 			$('#zenodo_dialog').dialog();
 			// $('#zenodo_dialog').css('width', '700px').css('height', '400px');
-			$('#zenodo_dialog').parent().css('width', '700px').css('height', '500px').css('top',
+			$('#zenodo_dialog').parent().css('width', '700px').css('height', '550px').css('top',
 				'100px').css('z-index', '9999');
 
 			$('#zenodo_dialog').parent().css('box-shadow', '0px 0px 0px #5151514D');
@@ -128,6 +131,9 @@ $(document).ready(function () {
 			if (self.published)
 				return;
 
+			if ($('#zenodo_error').length)
+				$('#zenodo_error').remove();
+
 			var data = {
 				filename: self.currentFilename,
 				metadata: zenodoDialog.metadata(),
@@ -150,9 +156,14 @@ $(document).ready(function () {
 				$('#zenodo_dialog_production').off('click');
 
 				$('#zendialog_content').fadeOut(400, function () {
-					$('#zenodo_dialog').append('<div id="zenodo_end">Your file has been published to Zenodo.org</div>');
-
+					$('#zenodo_dialog').append(
+						'<div id="zenodo_end">Your file has been published to Zenodo.org</div>');
 				});
+			}
+			else {
+				zenodoActions.enableButtons(true);
+				$('#zenodo_dialog').prepend('<div id="zenodo_error"></div>');
+				$('#zenodo_error').text(response.error);
 			}
 
 		}

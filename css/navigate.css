@@ -53,6 +53,14 @@ DIV.zenodo_dialog_shadow {
 	position: absolute;
 }
 
+#zenodo_error {
+	width: 100%;
+	text-align: center;
+	height: 20px;
+	font-style: italic;
+	color: #f33;
+}
+
 TD.zendialog_left {
 	font-weight: bold;
 	width: 180px;
