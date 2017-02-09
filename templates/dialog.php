@@ -1,4 +1,4 @@
-<div id="" title="Zenodo">
+<div id="zendialog_content">
 
 	<table>
 		<tr>
@@ -48,22 +48,22 @@
 
 		<tr>
 			<td class="zendialog_left">Publication date:</td>
-			<td><input type="date" id="publicationdate"></td>
+			<td><input type="date" id="zendialog_publicationdate"></td>
 		</tr>
 
 		<tr>
 			<td class="zendialog_left">Title:</td>
-			<td><input type="text" id="title" style="width: 400px"></td>
+			<td><input type="text" id="zendialog_title" style="width: 400px"></td>
 		</tr>
 
 		<tr>
 			<td class="zendialog_left">Creators:</td>
-			<td><input type="text" id="creators" style="width: 400px"></td>
+			<td><input type="text" id="zendialog_creators" style="width: 400px"></td>
 		</tr>
 
 		<tr>
 			<td class="zendialog_left">Description:</td>
-			<td><input type="text" id="description" style="width: 400px"></td>
+			<td><input type="text" id="zendialog_description" style="width: 400px"></td>
 		</tr>
 
 		<tr>
@@ -73,7 +73,7 @@
 		<tr>
 			<td class="zendialog_left">Access right:</td>
 			<td>
-				<select id="accessright">
+				<select id="zendialog_accessright">
 					<option value="open">Open</option>
 					<option value="embargoed">Embargoed</option>
 					<option value="restricted">Restricted</option>
@@ -84,7 +84,7 @@
 
 		<tr>
 			<td class="zendialog_left">License:</td>
-			<td><select id="license">
+			<td><select id="zendialog_license">
 					<option value="Open Access">Open Access</option>
 					<option value="Creative Commons">Creative Commons</option>
 				</select>
@@ -92,7 +92,7 @@
 		</tr>
 		<tr>
 			<td class="zendialog_left">Embargo date:</td>
-			<td><input type="date" id="embargodate">
+			<td><input type="date" id="zendialog_embargodate">
 			</td>
 		</tr>
 		<tr>
