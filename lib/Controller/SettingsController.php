@@ -61,16 +61,22 @@ class SettingsController extends Controller {
 
 	public function getZenodoInfo() {
 		$params = [
-			'tokenSandbox'    => $this->configService->getAppValue(ConfigService::TOKEN_SANDBOX),
-			'tokenProduction' => $this->configService->getAppValue(ConfigService::TOKEN_PRODUCTION)
+			'tokenSandbox' => $this->configService->getAppValue(
+				ConfigService::ZENODO_TOKEN_SANDBOX
+			),
+			'tokenProduction' => $this->configService->getAppValue(
+				ConfigService::ZENODO_TOKEN_PRODUCTION
+			)
 		];
 
 		return $params;
 	}
 
 	public function setZenodoInfo($token_sandbox, $token_production) {
-		$this->configService->setAppValue(ConfigService::TOKEN_SANDBOX, $token_sandbox);
-		$this->configService->setAppValue(ConfigService::TOKEN_PRODUCTION, $token_production);
+		$this->configService->setAppValue(ConfigService::ZENODO_TOKEN_SANDBOX, $token_sandbox);
+		$this->configService->setAppValue(
+			ConfigService::ZENODO_TOKEN_PRODUCTION, $token_production
+		);
 
 		return $this->getZenodoInfo();
 	}
