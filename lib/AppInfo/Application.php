@@ -116,9 +116,10 @@ class Application extends App {
 		\OC::$server->getEventDispatcher()
 					->addListener(
 						'OCA\Files::loadAdditionalScripts', function () {
-							// add some animation
+						// add some animation
 						\OCP\Util::addScript('zenodo', 'jquery.animate-shadow-min');
 						\OCP\Util::addScript('zenodo', 'navigate');
+						\OCP\Util::addScript('zenodo', 'dialog');
 						\OCP\Util::addStyle('zenodo', 'navigate');
 					}
 					);
