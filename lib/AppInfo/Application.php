@@ -28,6 +28,7 @@
 namespace OCA\Zenodo\AppInfo;
 
 use \OCA\Zenodo\Controller\SettingsController;
+use \OCA\Zenodo\Controller\ZenodoController;
 use \OCA\Zenodo\Service\ConfigService;
 use \OCA\Zenodo\Service\MiscService;
 use OCP\AppFramework\App;
@@ -61,9 +62,22 @@ class Application extends App {
 		}
 		);
 
+
+		/**
+		 * Controllers
+		 */
 		$container->registerService(
 			'SettingsController', function ($c) {
 			return new SettingsController(
+				$c->query('AppName'), $c->query('Request'), $c->query('ConfigService'),
+				$c->query('MiscService')
+			);
+		}
+		);
+
+		$container->registerService(
+			'ZenodoController', function ($c) {
+			return new ZenodoController(
 				$c->query('AppName'), $c->query('Request'), $c->query('ConfigService'),
 				$c->query('MiscService')
 			);
@@ -96,6 +110,20 @@ class Application extends App {
 		}
 		);
 	}
+
+
+	public function registerInFiles() {
+		\OC::$server->getEventDispatcher()
+					->addListener(
+						'OCA\Files::loadAdditionalScripts', function () {
+							// add some animation
+						\OCP\Util::addScript('zenodo', 'jquery.animate-shadow-min');
+						\OCP\Util::addScript('zenodo', 'navigate');
+						\OCP\Util::addStyle('zenodo', 'navigate');
+					}
+					);
+	}
+
 
 	public function registerSettingsAdmin() {
 		\OCP\App::registerAdmin(

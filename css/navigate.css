@@ -1,0 +1,40 @@
+.icon-zenodo {
+	background-image: url('../img/zenodo_z.svg');
+}
+
+BUTTON.ui-dialog-titlebar-close {
+	visibility: hidden;
+}
+
+#zenodo_dialog_buttons {
+	width: 100%;
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	border-top: #ddd 1px solid;
+}
+
+#zenodo_dialog_close {
+	background: #ececec;
+}
+
+#zenodo_dialog_send {
+	background: #e4e4e4;
+}
+
+DIV.zenodo_dialog_button {
+	display: inline-block;
+	width: 50%;
+	height: 50px;
+	text-align: center;
+	vertical-align: center;
+	line-height: 50px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+DIV.zenodo_dialog_shadow {
+	-moz-box-shadow: 3px 3px 5px #5151514D;
+	-webkit-box-shadow: 3px 3px 5px #5151514D;
+	box-shadow: 3px 3px 5px #5151514D;
+}

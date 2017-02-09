@@ -27,5 +27,5 @@
  */
 $app = new \OCA\Zenodo\AppInfo\Application();
 
-// $app->registerNavigation();
+$app->registerInFiles();
 $app->registerSettingsAdmin();

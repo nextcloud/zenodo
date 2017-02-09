@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Orcid - based on user_orcid from Lars Naesbye Christensen
+ * Zenodo - based on files_zenodo from Lars Naesbye Christensen
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
@@ -25,27 +25,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-return [
-	'routes' => [
-		[
-			'name' => 'settings#getZenodoInfo',
-			'url'  => 'ajax/settings/getZenodoInfo.php',
-			'verb' => 'POST'
-		],
-		[
-			'name' => 'settings#setZenodoInfo',
-			'url'  => 'ajax/settings/setZenodoInfo.php',
-			'verb' => 'POST'
-		],
-		[
-			'name' => 'Zenodo#dialogZenodo',
-			'url'  => 'ajax/getZenodoDialog.php',
-			'verb' => 'GET'
-		]
+namespace OCA\Zenodo\Controller;
 
+use \OCA\Zenodo\Service\ConfigService;
+use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\TemplateResponse;
+use OCP\IRequest;
 
+class ZenodoController extends Controller {
 
-	]
-];
+	private $configService;
 
+	private $miscService;
 
+	public function __construct(
+		$appName, IRequest $request, ConfigService $configService, $miscService
+	) {
+		parent::__construct($appName, $request);
+		$this->configService = $configService;
+		$this->miscService = $miscService;
+	}
+
+	//
+	// Admin
+	//
+
+	/**
+	 * @NoCSRFRequired
+	 * @NoAdminRequired
+	 */
+	public function dialogZenodo() {
+		return new TemplateResponse($this->appName, 'dialog', [], 'blank');
+	}
+
+}
