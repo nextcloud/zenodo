@@ -25,66 +25,78 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-namespace OCA\Zenodo\Controller;
+namespace OCA\Zenodo\Service;
 
 use \OCA\Zenodo\Service\ConfigService;
 use OCA\Zenodo\Service\MiscService;
-use OCA\Zenodo\Service\ApiService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IRequest;
 
-class ZenodoController extends Controller {
+class ApiService {
+
+	const ZENODO_DOMAIN_SANDBOX = 'https://sandbox.zenodo.org/';
+	const ZENODO_DOMAIN_PRODUCTION = 'https://zenodo.org/';
+
+	const ZENODO_API_DEPOSITIONS_CREATE = 'api/deposit/depositions';
+	const ZENODO_API_DEPOSITIONS_FILES_UPLOAD = 'api/deposit/depositions/%ID%/files';
 
 	private $configService;
-	private $apiService;
 	private $miscService;
 
-	public function __construct(
-		$appName, IRequest $request, ConfigService $configService, ApiService $apiService,
-		MiscService $miscService
-	) {
-		parent::__construct($appName, $request);
+	private $production = false;
+	private $token = '';
+
+	public function __construct(ConfigService $configService, MiscService $miscService) {
 		$this->configService = $configService;
-		$this->apiService = $apiService;
 		$this->miscService = $miscService;
 	}
 
-	//
-	// Admin
-	//
 
-	/**
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
-	 */
-	public function dialogZenodo() {
-		return new TemplateResponse($this->appName, 'dialog', [], 'blank');
-	}
+	public function init($production) {
 
+		$this->production = $production;
 
-	/**
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
-	 */
-	public function publishToZenodo($filename, $metadata, $production) {
-
-
-		$published = false;
-		if ($this->apiService->init($production)) {
-			$this->apiService->create_deposition($metadata);
-
-			$published = true;
-		} else {
-			$error =
-				'No token defined for this operation; please contact your Nextcloud administrator';
+		$this->initToken();
+		if ($this->token === '') {
+			return false;
 		}
 
-		$response = array(
-			'error'     => ($error) ? $error : null,
-			'published' => $published
-		);
-
-		return $response;
+		return true;
 	}
+
+	public function configured() {
+		if ($this->token === '') {
+			return false;
+		}
+
+		return true;
+	}
+
+	private function initToken() {
+		if ($this->production) {
+			$this->token =
+				$this->configService->getAppValue(ConfigService::ZENODO_TOKEN_PRODUCTION);
+		} else {
+			$this->token = $this->configService->getAppValue(ConfigService::ZENODO_TOKEN_SANDBOX);
+		}
+	}
+
+
+	public static function generateUrl($from, $production) {
+
+		$url = '';
+
+		return $url;
+	}
+
+	public function create_deposition($metadata) {
+
+		if (!$this->configured) {
+			return false;
+		}
+
+		return true;
+	}
+
 }

@@ -30,6 +30,7 @@ namespace OCA\Zenodo\AppInfo;
 use \OCA\Zenodo\Controller\SettingsController;
 use \OCA\Zenodo\Controller\ZenodoController;
 use \OCA\Zenodo\Service\ConfigService;
+use \OCA\Zenodo\Service\ApiService;
 use \OCA\Zenodo\Service\MiscService;
 use OCP\AppFramework\App;
 use OCP\Util;
@@ -62,6 +63,14 @@ class Application extends App {
 		}
 		);
 
+		$container->registerService(
+			'ApiService', function ($c) {
+			return new ApiService(
+				$c->query('ConfigService'), $c->query('MiscService')
+			);
+		}
+		);
+
 
 		/**
 		 * Controllers
@@ -79,6 +88,7 @@ class Application extends App {
 			'ZenodoController', function ($c) {
 			return new ZenodoController(
 				$c->query('AppName'), $c->query('Request'), $c->query('ConfigService'),
+				$c->query('ApiService'),
 				$c->query('MiscService')
 			);
 		}
