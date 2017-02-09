@@ -44,6 +44,14 @@ DIV.zenodo_dialog_shadow {
 	box-shadow: 3px 3px 5px #5151514D;
 }
 
+#zenodo_end {
+	width: 90%;
+	text-align: center;
+	height: 40px;
+	top: 42%;
+	font-style: italic;
+	position: absolute;
+}
 
 TD.zendialog_left {
 	font-weight: bold;
