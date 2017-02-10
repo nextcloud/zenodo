@@ -3,12 +3,12 @@ $(document).ready(function () {
 	var zenodoActions = {
 
 		New: {
-			currentFilename: '',
+			currentFileId: '',
 
 			init: function () {
 
 				var self = this;
-				self.currentFilename = '';
+				self.currentFileId = '';
 				self.published = false;
 
 				// add a div to the <body>
@@ -41,7 +41,7 @@ $(document).ready(function () {
 				if ($('#zenodo_dialog_buttons').length)
 					$('#zenodo_dialog_buttons').remove();
 
-				self.currentFilename = filename;
+				self.currentFileId = context.fileList.getModelForFile(filename).get('id');
 				self.published = false;
 
 				$.get(OC.filePath('zenodo', 'ajax',
@@ -136,7 +136,7 @@ $(document).ready(function () {
 					$('#zenodo_error').remove();
 
 				var data = {
-					filename: self.currentFilename,
+					fileid: self.currentFileId,
 					metadata: zenodoDialog.metadata(),
 					production: prod
 				};
