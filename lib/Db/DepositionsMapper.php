@@ -23,12 +23,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace OCA\Zenodo;
+namespace OCA\Zenodo\Db;
 
-$app = new \OCA\Zenodo\AppInfo\Application();
+use \OCA\Zenodo\Db\Depositions;
+use \OCA\Zenodo\Model\Deposition;
+use OCP\IDBConnection;
+use OCP\AppFramework\Db\Mapper;
 
-$response = $app->getContainer()
-				->query('SettingsController')
-				->admin();
+class DepositionsMapper extends Mapper {
 
-return $response->render();
+	const TABLENAME = 'zenodo_depositions';
+
+	public function __construct(IDBConnection $db) {
+		parent::__construct($db, self::TABLENAME, 'OCA\Zenodo\Db\Depositions');
+	}
+
+	public function find($id) {
+		$sql = 'SELECT * FROM *PREFIX*' . self::TABLENAME . ' WHERE id = ?';
+
+		return $this->findEntity(
+			$sql, [
+					$id
+				]
+		);
+	}
+
+	public static function insertDeposition($deposition)
+	{
+
+	}
+}
+

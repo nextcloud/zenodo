@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!--
+  ~ Zenodo - Publish your work to Zenodo.org
+  ~
+  ~ This file is licensed under the Affero General Public License version 3 or
+  ~ later. See the COPYING file.
+  ~
+  ~ @author Maxence Lange <maxence@pontapreta.net>
+  ~ @copyright 2017
+  ~ @license GNU AGPL version 3 or any later version
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<database>
+	<name>*dbname*</name>
+	<create>true</create>
+	<overwrite>false</overwrite>
+	<charset>utf8</charset>
+
+	<table>
+		<name>*dbprefix*zenodo_depositions</name>
+		<declaration>
+			<field>
+				<name>id</name>
+				<type>integer</type>
+				<notnull>true</notnull>
+				<autoincrement>true</autoincrement>
+				<unsigned>true</unsigned>
+				<primary>true</primary>
+				<length>9</length>
+			</field>
+			<field>
+				<name>fileId</name>
+				<type>integer</type>
+				<notnull>true</notnull>
+				<length>9</length>
+			</field>
+			<field>
+				<name>zenId</name>
+				<type>integer</type>
+				<notnull>true</notnull>
+				<length>11</length>
+			</field>
+		</declaration>
+	</table>
+
+</database>

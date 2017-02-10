@@ -23,12 +23,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace OCA\Zenodo;
+namespace OCA\Zenodo\Db;
 
-$app = new \OCA\Zenodo\AppInfo\Application();
+use \OCA\Zenodo\Model\Deposition;
+use OCP\AppFramework\Db\Entity;
 
-$response = $app->getContainer()
-				->query('SettingsController')
-				->admin();
+class Depositions extends Entity {
 
-return $response->render();
+	public $id;
+	public $fileid;
+	public $zenid;
+
+	public function __construct(Deposition $item = null) {
+		$this->setFileId($item->getFileId());
+		$this->setZenId($item->getZenId());
+	}
+}
+

@@ -23,12 +23,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace OCA\Zenodo;
+namespace OCA\Zenodo\Model;
 
-$app = new \OCA\Zenodo\AppInfo\Application();
+class Deposition {
 
-$response = $app->getContainer()
-				->query('SettingsController')
-				->admin();
+	private $fileId;
+	private $zenId;
 
-return $response->render();
+	public function __construct() {
+
+	}
+
+	public function setFileId($fileId) {
+		$this->fileId = $fileId;
+	}
+
+	public function getFileId() {
+		return $this->fileId;
+	}
+
+	public function setZenId($zenId) {
+		$this->zenId = $zenId;
+	}
+
+	public function getZenId() {
+		return $this->userId;
+	}
+
+}
+
+

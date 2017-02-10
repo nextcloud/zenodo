@@ -1,12 +1,10 @@
 <?php
-
 /**
- * Zenodo - based on files_zenodo from Lars Naesbye Christensen
+ * Zenodo - Publish your work to Zenodo.org
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
  *
- * @author Lars Naesbye Christensen, DeIC
  * @author Maxence Lange <maxence@pontapreta.net>
  * @copyright 2017
  * @license GNU AGPL version 3 or any later version
@@ -23,8 +21,8 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
+
 namespace OCA\Zenodo\Service;
 
 use OCP\ILogger;
