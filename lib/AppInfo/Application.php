@@ -71,6 +71,13 @@ class Application extends App {
 		}
 		);
 
+		$container->registerService(
+			'FileService', function ($c) {
+			return new FileService(
+				$c->query('UserId'), $c->query('ConfigService'), $c->query('MiscService')
+			);
+		}
+		);
 
 		/**
 		 * Controllers
