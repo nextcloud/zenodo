@@ -27,6 +27,9 @@
  */
 namespace OCA\Zenodo\Service;
 
+use OC\Files\Filesystem;
+use OC\Files\View;
+use OCP\Files\NotFoundException;
 
 class FileService {
 
@@ -49,7 +52,7 @@ class FileService {
 	 *
 	 * @return array
 	 */
-	public function getFilesPerFileId($fileId, $options) {
+	public function getFilesPerFileId($fileId) {
 
 		if ($this->userId === '') {
 			return false;
@@ -62,18 +65,33 @@ class FileService {
 		$view = Filesystem::getView();
 
 		$data = array();
-		$file = self::getFileInfoFromFileId($fileId, $view, $this->miscService);
+		$file = self::getFileInfoFromFileId($fileId, $view);
 
 		if ($file === null) {
 			return false;
 		}
 
 		// no folder yet
-		if ($file->getType() == \OCP\Files\FileInfo::TYPE_FOLDER) {
+		if ($file->getType() === \OCP\Files\FileInfo::TYPE_FOLDER) {
 			return false;
 		}
 
+		$data[] = $file;
+
 		return $data;
+	}
+
+
+	// might work with encrypted file and remote file
+	public static function getAbsolutePath($file) {
+		$view = new View('/');
+		if ($file->getStorage()
+				 ->isLocal()
+		) {
+			return $view->getLocalFile($file->getPath());
+		}
+
+		return $view->toTmpFile($file->getPath(), true);
 	}
 
 
