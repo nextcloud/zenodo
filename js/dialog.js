@@ -61,13 +61,15 @@ var zenodoDialog = {
 	},
 
 	metadata: function () {
+		var creators = [{name: $('#zendialog_creators').val()}];
+
 		var data = {
 			upload_type: $('#zendialog_uploadtype option:selected').val(),
 			publication_type: $('#zendialog_publicationtype option:selected').val(),
 			image_type: $('#zendialog_imagetype option:selected').val(),
 			publication_date: $('#zendialog_publicationdate').val(),
 			title: $('#zendialog_title').val(),
-			creators: $('#zendialog_creators').val().split(','),
+			creators: creators,
 			description: $('#zendialog_description').val(),
 			access_right: $('#zendialog_accessright option:selected').val(),
 			embargo_date: $('#zendialog_embargodate').val(),
