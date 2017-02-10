@@ -37,7 +37,8 @@ var zenodoDialog = {
 		$('#zendialog_display_accesscondition').hide();
 
 		$('#zendialog_accessright').change(function () {
-			if ($('#zendialog_accessright option:selected').val() == 'open')
+			if ($('#zendialog_accessright option:selected').val() == 'open' ||
+				$('#zendialog_accessright option:selected').val() == 'embargoed')
 				$('#zendialog_license').fadeIn(200);
 			else
 				$('#zendialog_license').fadeOut(200);
