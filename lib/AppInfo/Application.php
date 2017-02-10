@@ -31,6 +31,7 @@ use \OCA\Zenodo\Controller\SettingsController;
 use \OCA\Zenodo\Controller\ZenodoController;
 use \OCA\Zenodo\Service\ConfigService;
 use \OCA\Zenodo\Service\ApiService;
+use \OCA\Zenodo\Service\FileService;
 use \OCA\Zenodo\Service\MiscService;
 use OCP\AppFramework\App;
 use OCP\Util;
@@ -66,7 +67,7 @@ class Application extends App {
 		$container->registerService(
 			'ApiService', function ($c) {
 			return new ApiService(
-				$c->query('ConfigService'), $c->query('MiscService')
+				$c->query('ConfigService'), $c->query('FileService'), $c->query('MiscService')
 			);
 		}
 		);
