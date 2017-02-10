@@ -29,7 +29,9 @@ namespace OCA\Zenodo\Service;
 
 use \OCA\Zenodo\Model\iError;
 use \OCA\Zenodo\Service\ConfigService;
-use OCA\Zenodo\Service\MiscService;
+use \OCA\Zenodo\Service\FileService;
+use \OCA\Zenodo\Service\MiscService;
+use \OCA\Zenodo\Db\DepositionsMapper;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IRequest;
@@ -43,13 +45,17 @@ class ApiService {
 	const ZENODO_API_DEPOSITIONS_FILES_UPLOAD = 'api/deposit/depositions/%ID%/files?';
 
 	private $configService;
+	private $fileService;
 	private $miscService;
 
 	private $production = false;
 	private $token = '';
 
-	public function __construct(ConfigService $configService, MiscService $miscService) {
+	public function __construct(
+		ConfigService $configService, FileService $fileService, MiscService $miscService
+	) {
 		$this->configService = $configService;
+		$this->fileService = $fileService;
 		$this->miscService = $miscService;
 	}
 
@@ -86,7 +92,6 @@ class ApiService {
 	private function initToken() {
 
 		if ($this->production === true) {
-			$this->miscService->log("==== PROD");
 			$this->token =
 				$this->configService->getAppValue(ConfigService::ZENODO_TOKEN_PRODUCTION);
 		} else {
@@ -110,6 +115,15 @@ class ApiService {
 		return sprintf("%s%saccess_token=%s", $url, $path, $this->token);
 	}
 
+
+	/**
+	 * Create a new deposition on Zenodo
+	 *
+	 * @param $metadata
+	 * @param null $iError
+	 *
+	 * @return bool|mixed
+	 */
 	public function create_deposition($metadata, &$iError = null) {
 
 		if ($iError === null) {
@@ -122,13 +136,11 @@ class ApiService {
 
 		$url = $this->generateURl(self::ZENODO_API_DEPOSITIONS_CREATE);
 		$json = json_encode($metadata);
-		$result = self::curlIt($url, $json, $iError);
+		$result = self::curlIt($url, $json);
 
-		$this->miscService->log("_METADATA: " . var_export($metadata, true));
-		$this->miscService->log("_RESULT: " . var_export($result, true));
-
-		if ($result->status === 200) {
-			return true;
+		if (property_exists($result, 'created')) {
+			//DepositionsMapper::insertDeposition($result);
+			return $result;
 		}
 
 		$iError->setCode($result->status);
@@ -141,17 +153,57 @@ class ApiService {
 		return false;
 	}
 
-	public static function curlIt($url, $json) {
+
+	// Add a file to Deposition
+	public function upload_file($depositionid, $fileid, &$iError = null) {
+
+		$files = $this->fileService->getFilesPerFileId($fileid);
+		if (sizeof($files) == 0) {
+			return false;
+		}
+
+		$url = $this->generateURl(
+			str_replace('%ID%', $depositionid, self::ZENODO_API_DEPOSITIONS_FILES_UPLOAD)
+		);
+
+		foreach ($files as $file) {
+
+			$filepath = FileService::getAbsolutePath($file);
+			if (version_compare(PHP_VERSION, '5.5.0') >= 0) {
+				$post = array(
+					'file' => curl_file_create($filepath),
+					'name' => basename($filepath)
+				);
+			} else {
+				$post = array(
+					'file' => '@' . $filepath,
+					'name' => basename($filepath)
+				);
+			}
+
+			$result = self::curlIt($url, $post, 'multipart/form-data');
+			$this->miscService->log(" file upload: " . var_export($result, true));
+		}
+
+		return true;
+	}
+
+
+	public static function curlIt($url, $post, $content_type = null) {
 
 		$curl = curl_init($url);
-		curl_setopt($curl, CURLOPT_HEADER, false);
+		//	curl_setopt($curl, CURLOPT_HEADER, false);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt(
 			$curl, CURLOPT_HTTPHEADER,
-			array("Content-type: application/json")
+			array(
+				sprintf(
+					'Content-type: %s', ($content_type == null) ? "application/json" : $content_type
+				)
+			)
 		);
 		curl_setopt($curl, CURLOPT_POST, true);
-		curl_setopt($curl, CURLOPT_POSTFIELDS, $json);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
 
 		return json_decode(curl_exec($curl));
 	}

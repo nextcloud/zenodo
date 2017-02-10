@@ -68,12 +68,14 @@ class ZenodoController extends Controller {
 	 * @NoCSRFRequired
 	 * @NoAdminRequired
 	 */
-	public function publishToZenodo($filename, $metadata, $production) {
+	public function publishToZenodo($fileid, $metadata, $production) {
 
 		$iError = new iError();
 		$published = false;
 		if ($this->apiService->init(($production === 'true') ? true : false, $iError)
-			&& $this->apiService->create_deposition(array('metadata' => $metadata), $iError)
+			&& ($deposition =
+				$this->apiService->create_deposition(array('metadata' => $metadata), $iError))
+			&& $this->apiService->upload_file($deposition->id, $fileid, $iError)
 		) {
 			$published = true;
 		}
