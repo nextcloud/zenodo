@@ -57,15 +57,19 @@
 		</tr>
 
 		<tr>
+			<td class="zendialog_left">Description:</td>
+			<td><input type="text" id="zendialog_description" style="width: 400px"></td>
+		</tr>
+
+		<tr>
 			<td class="zendialog_left">Creators:</td>
 			<td><input type="text" id="zendialog_creators" style="width: 400px"></td>
 		</tr>
 
 		<tr>
-			<td class="zendialog_left">Description:</td>
-			<td><input type="text" id="zendialog_description" style="width: 400px"></td>
+			<td></td>
+			<td><div id="zendialog_creators_list"></div></td>
 		</tr>
-
 		<tr>
 			<td style="height: 35px;">&nbsp;</td>
 			<td></td>
@@ -83,8 +87,11 @@
 
 				<select id="zendialog_license">
 					<option value="">Choose a License</option>
-					<option value="Open Access">Open Access</option>
-					<option value="Creative Commons">Creative Commons</option>
+					<option value="CC-BY-4.0">Creative Commons Attribution 4.0</option>
+					<option value="CC-BY-SA-4.0">Creative Commons Attribution-ShareAlike 4.0
+					</option>
+					<option value="CC-BY-NC-4.0">Creative Commons Attribution-NonCommercial 4.0
+					</option>
 				</select>
 			</td>
 		</tr>
