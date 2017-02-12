@@ -4,10 +4,11 @@
 	<id>zenodo</id>
 	<name>Zenodo</name>
 	<summary>Publish your work to Zenodo.org</summary>
-	<description>Publish your work to Zenodo.org</description>
+	<description>based on files_zenodo written by Lars Næsbye Christensen, DeIC</description>
 	<version>0.9.0</version>
 	<licence>agpl</licence>
 	<author>Maxence Lange</author>
+	<author>Lars Næsbye Christensen</author>
 	<documentation>
 		<admin>https://github.com/nextcloud-gmbh/zenodo/wiki</admin>
 	</documentation>
