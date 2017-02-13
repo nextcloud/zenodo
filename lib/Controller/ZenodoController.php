@@ -35,15 +35,20 @@ use OCP\IRequest;
 
 class ZenodoController extends Controller {
 
+	private $userId;
+	private $userManager;
 	private $configService;
 	private $apiService;
 	private $miscService;
 
 	public function __construct(
-		$appName, IRequest $request, ConfigService $configService, ApiService $apiService,
+		$appName, IRequest $request, $userId, $userManager, ConfigService $configService,
+		ApiService $apiService,
 		MiscService $miscService
 	) {
 		parent::__construct($appName, $request);
+		$this->userId = $userId;
+		$this->userManager = $userManager;
 		$this->configService = $configService;
 		$this->apiService = $apiService;
 		$this->miscService = $miscService;
@@ -81,6 +86,35 @@ class ZenodoController extends Controller {
 		$response = array(
 			'error'     => $iError->toArray(),
 			'published' => $published
+		);
+
+		return $response;
+	}
+
+	/**
+	 * @NoAdminRequired
+	 */
+	public function getLocalCreator($username) {
+		if ($username === '_self') {
+			$username = $this->userId;
+		}
+
+		$orcid = '';
+		$realname = '';
+
+		$user = $this->userManager->get($username);
+		if ($user != null) {
+
+			$realname = $user->getDisplayName();
+
+			if (\OCP\App::isEnabled('orcid')) {
+				$orcid = \OCA\Orcid\Service\StaticService::getUserOrcid($username);
+			}
+		}
+
+		$response = array(
+			'realname' => $realname,
+			'orcid'    => $orcid
 		);
 
 		return $response;
