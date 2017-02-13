@@ -83,8 +83,10 @@
 		</tr>
 
 		<tr>
-			<td class="zendialog_left">Description:</td>
-			<td><input type="text" id="zendialog_description" style="width: 400px"></td>
+			<td class="zendialog_left" style="vertical-align: top; padding-top: 10px;">Description:
+			</td>
+			<td><textarea id="zendialog_description" style="width: 400px; height: 60px;"></textarea>
+			</td>
 		</tr>
 
 		<tr>
@@ -100,7 +102,8 @@
 					<input type="text" id="zendialog_creator_orcid" style="width: 150px">
 					<div id="zendialog_create_add"></div>
 				</div>
-				<div id="zendialog_creator_syntax_error">Name of creator must be in the format <b>Family name, Given names</b></div>
+				<div id="zendialog_creator_syntax_error">Name of creator must be in the format <b>Family
+						name, Given names</b></div>
 				<div id="zendialog_creators_list"></div>
 			</td>
 		</tr>

@@ -29,6 +29,8 @@ var zenodoDialog = {
 
 	init: function () {
 
+		zenodoDialog.currentCreators = [];
+
 		$('#zendialog_publicationtype').hide();
 		$('#zendialog_imagetype').hide();
 
@@ -171,7 +173,23 @@ var zenodoDialog = {
 			orcid: orcid
 		});
 		$('#zendialog_creators_list').append(
-			'<div>' + realname + orcid + '</div>');
+			'<div class="zenodo_creator_item" itemvalue="' + realname + '">' + realname + orcid +
+			'</div>');
+
+		$('DIV.zenodo_creator_item').on('click', function () {
+			$(this).remove();
+			zenodoDialog.remCreator($(this).attr('itemvalue'));
+		})
+	},
+
+
+	remCreator: function (realname) {
+		tmpCreators = [];
+		for (i = 0; i < zenodoDialog.currentCreators.length; i++) {
+			if (zenodoDialog.currentCreators[i].realname != realname)
+				tmpCreators.push(zenodoDialog.currentCreators[i]);
+		}
+		zenodoDialog.currentCreators = tmpCreators;
 	},
 
 
