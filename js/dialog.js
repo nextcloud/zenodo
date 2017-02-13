@@ -22,7 +22,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 var zenodoDialog = {
+
+	currentCreators: [],
 
 	init: function () {
 
@@ -59,6 +62,8 @@ var zenodoDialog = {
 		$('#zendialog_license').hide();
 		$('#zendialog_display_embargodate').hide();
 		$('#zendialog_display_accesscondition').hide();
+		$('#zendialog_creator_search_result').hide();
+		$('#zendialog_creator_syntax_error').hide();
 
 		$('#zendialog_accessright').change(function () {
 			if ($('#zendialog_accessright option:selected').val() == 'open' ||
@@ -82,7 +87,93 @@ var zenodoDialog = {
 				$('#zendialog_display_accesscondition').fadeOut(200);
 		});
 
+		$('#zendialog_sub').on('click', function () {
+			zenodoDialog.localCreator('_self');
+		});
+
+		$('#zendialog_creator_search').on('input propertychange paste focus', function () {
+			if ($('#zendialog_creator_search').val().trim() == '')
+				zenodoDialog.searchCreatorResult(null);
+			else
+				$.get(OC.linkToOCS('apps/files_sharing/api/v1') + 'sharees',
+					{
+						format: 'json',
+						search: $('#zendialog_creator_search').val().trim(),
+						perPage: 200,
+						itemType: 'principals'
+					}, zenodoDialog.searchCreatorResult);
+		}).blur(function () {
+			$('#zendialog_creator_search_result').fadeOut(400);
+		});
+
+
+		$('#zendialog_create_add').css('background-image',
+			'url(' + OC.imagePath('core', 'actions/add') + ')');
+		$('#zendialog_create_add').on('click', function () {
+
+			if ($('#zendialog_creator_realname').val().indexOf(',') > -1) {
+				$('#zendialog_creator_syntax_error').fadeOut(300);
+				zenodoDialog.addCreator($('#zendialog_creator_realname').val(),
+					$('#zendialog_creator_orcid').val());
+			} else {
+				$('#zendialog_creator_syntax_error').fadeIn(300);
+			}
+
+		})
 	},
+
+
+	searchCreatorResult: function (response) {
+		if (response == null || response.ocs.data.users == 0)
+			$('#zendialog_creator_search_result').fadeOut(300);
+
+		else {
+			$('#zendialog_creator_search_result').empty();
+			$.each(response.ocs.data.users, function (index, value) {
+				$('#zendialog_creator_search_result').append(
+					'<div class="zendialog_result" searchresult="' + value.value.shareWith +
+					'">' + value.label + '   (' +
+					value.value.shareWith + ')</div>');
+			});
+
+			$('DIV.zendialog_result').on('click', function () {
+				zenodoDialog.localCreator($(this).attr('searchresult'));
+			});
+			$('#zendialog_creator_search_result').fadeIn(300);
+		}
+	},
+
+
+	localCreator: function (username) {
+		var data = {username: username};
+		$.post(OC.filePath('zenodo', 'ajax',
+			'getLocalCreator.php'), data, zenodoDialog.displayLocalCreator);
+	},
+
+
+	displayLocalCreator: function (response) {
+		$('#zendialog_creator_realname').val(response.realname);
+		$('#zendialog_creator_orcid').val(response.orcid);
+	},
+
+
+	addCreator: function (realname, orcid) {
+		if (orcid != '')
+			orcid = ' - ' + orcid;
+
+		for (i = 0; i < zenodoDialog.currentCreators.length; i++) {
+			if (zenodoDialog.currentCreators[i].realname == realname)
+				return;
+		}
+
+		zenodoDialog.currentCreators.push({
+			realname: realname,
+			orcid: orcid
+		});
+		$('#zendialog_creators_list').append(
+			'<div>' + realname + orcid + '</div>');
+	},
+
 
 	metadata: function () {
 		var creators = [{name: $('#zendialog_creators').val()}];
@@ -105,3 +196,4 @@ var zenodoDialog = {
 	}
 
 };
+

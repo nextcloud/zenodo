@@ -6,6 +6,10 @@ BUTTON.ui-dialog-titlebar-close {
 	visibility: hidden;
 }
 
+#zenodo_dialog {
+	height: 100%;
+}
+
 #zenodo_dialog_buttons {
 	width: 100%;
 	position: absolute;
@@ -66,3 +70,63 @@ TD.zendialog_left {
 	background: #eee;
 }
 
+TD.zendialog_creator_left {
+	height: 100px;
+	vertical-align: top;
+	padding-top: 10px;
+}
+
+TD.zendialog_creator {
+	vertical-align: top;
+}
+
+SPAN.zendialog_sub {
+	font-weight: normal;
+	font-style: italic;
+	font-size: 11px;
+	cursor: pointer;
+}
+
+#zendialog_creator_realname, #zendialog_creator_orcid {
+	display: inline-block;
+}
+
+#zendialog_create_add {
+	display: inline-block;
+	width: 16px;
+	margin-left: 4px;
+	height: 16px;
+	cursor: pointer;
+}
+
+DIV.zendialog_result {
+	width: 200px;
+	padding: 10px;
+	text-align: left;
+}
+
+DIV.zendialog_result:hover {
+	background: #adadad33;
+	cursor: pointer;
+}
+
+#zendialog_creator_search_result {
+	position: absolute;
+	z-index: 5;
+	border-radius: 4px;
+	border: solid 1px #00000088;
+	color: #000000bb;
+	background: #ffffffdd;
+}
+
+#zendialog_creator_search_result > #zendialog_creator_search {
+	position: relative;
+	top: 30px;
+	left: -10px;
+	width: 150px;
+	height: 30px;
+}
+
+#zendialog_creator_syntax_error {
+	color: #f33;
+}

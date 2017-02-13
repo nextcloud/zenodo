@@ -88,13 +88,28 @@
 		</tr>
 
 		<tr>
-			<td class="zendialog_left">Creators:</td>
-			<td><input type="text" id="zendialog_creators" style="width: 400px"></td>
+			<td class="zendialog_left zendialog_creator_left">
+				Creators:<br/>
+				<span class="zendialog_sub" id="zendialog_sub">add yourself as creator</span><br/>
+				<input type="text" id="zendialog_creator_search" style="width: 170px"
+					   placeholder="or search in Nextcloud"/>
+				<div id="zendialog_creator_search_result"></div>
+			</td>
+			<td class="zendialog_creator">
+				<div><input type="text" id="zendialog_creator_realname" style="width: 244px">
+					<input type="text" id="zendialog_creator_orcid" style="width: 150px">
+					<div id="zendialog_create_add"></div>
+				</div>
+				<div id="zendialog_creator_syntax_error">Name of creator must be in the format <b>Family name, Given names</b></div>
+				<div id="zendialog_creators_list"></div>
+			</td>
 		</tr>
 
 		<tr>
 			<td></td>
-			<td><div id="zendialog_creators_list"></div></td>
+			<td>
+				<div id="zendialog_creators_list"></div>
+			</td>
 		</tr>
 		<tr>
 			<td style="height: 35px;">&nbsp;</td>
