@@ -93,7 +93,9 @@ class Application extends App {
 		$container->registerService(
 			'ZenodoController', function ($c) {
 			return new ZenodoController(
-				$c->query('AppName'), $c->query('Request'), $c->query('ConfigService'),
+				$c->query('AppName'), $c->query('Request'), $c->query('UserId'),
+				$c->query('UserManager'),
+				$c->query('ConfigService'),
 				$c->query('ApiService'),
 				$c->query('MiscService')
 			);
@@ -123,6 +125,13 @@ class Application extends App {
 					  ->getUser();
 
 			return is_null($user) ? '' : $user->getUID();
+		}
+		);
+
+		$container->registerService(
+			'UserManager', function ($c) {
+			return $c->query('ServerContainer')
+					 ->getUserManager();
 		}
 		);
 	}
