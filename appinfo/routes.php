@@ -44,8 +44,12 @@ return [
 			'name' => 'Zenodo#dialogZenodo',
 			'url'  => 'ajax/getZenodoDialog.php',
 			'verb' => 'GET'
+		],
+		[
+			'name' => 'Zenodo#getLocalCreator',
+			'url'  => 'ajax/getLocalCreator.php',
+			'verb' => 'POST'
 		]
-
 
 	]
 ];
