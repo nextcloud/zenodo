@@ -42,6 +42,17 @@ DIV.zenodo_dialog_button {
 	cursor: pointer;
 }
 
+DIV.zenodo_dialog_button_50 {
+	display: inline-block;
+	width: 50% !important;
+	height: 50px;
+	text-align: center;
+	vertical-align: center;
+	line-height: 50px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
 DIV.zenodo_dialog_shadow {
 	-moz-box-shadow: 3px 3px 5px #5151514D;
 	-webkit-box-shadow: 3px 3px 5px #5151514D;

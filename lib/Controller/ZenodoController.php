@@ -96,12 +96,12 @@ class ZenodoController extends Controller {
 		) {
 
 			foreach ($depositions as $entry) {
-				$this->miscService->log(">>> " . $entry->title);
-				$data[] = array(
-					'title'     => $entry->title,
-					'depositid' => $entry->id,
-					'doi'       => $entry->doi
-				);
+				if ($entry->state === 'unsubmitted') {
+					$data[] = array(
+						'title'     => $entry->title,
+						'depositid' => $entry->id
+					);
+				}
 			}
 
 			$success = true;
