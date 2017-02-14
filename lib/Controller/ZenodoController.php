@@ -68,8 +68,15 @@ class ZenodoController extends Controller {
 	 * @NoCSRFRequired
 	 * @NoAdminRequired
 	 */
-	public function dialogZenodo() {
-		return new TemplateResponse($this->appName, 'dialog', [], 'blank');
+	public function dialogZenodo($type) {
+		switch ($type) {
+			case 'NewDeposition':
+				return new TemplateResponse($this->appName, 'dialog.newdeposition', [], 'blank');
+
+			case 'AddFile':
+				return new TemplateResponse($this->appName, 'dialog.addfile', [], 'blank');
+		}
+
 	}
 
 
