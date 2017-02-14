@@ -39,8 +39,12 @@ class ApiService {
 	const ZENODO_DOMAIN_SANDBOX = 'https://sandbox.zenodo.org/';
 	const ZENODO_DOMAIN_PRODUCTION = 'https://zenodo.org/';
 
+	const ZENODO_API_DEPOSITIONS_LIST = 'api/deposit/depositions?';
 	const ZENODO_API_DEPOSITIONS_CREATE = 'api/deposit/depositions?';
 	const ZENODO_API_DEPOSITIONS_FILES_UPLOAD = 'api/deposit/depositions/%ID%/files?';
+
+	const REQUEST_TYPE_POST = 'post';
+	const REQUEST_TYPE_GET = 'get';
 
 	private $configService;
 	private $fileService;
@@ -115,6 +119,33 @@ class ApiService {
 
 
 	/**
+	 * list all depositions from Zenodo
+	 *
+	 * @param null $iError
+	 *
+	 * @return bool|mixed
+	 */
+	public function list_deposition(&$iError = null) {
+
+		if ($iError === null) {
+			$iError = new $iError();
+		}
+
+		if (!$this->configured()) {
+			return false;
+		}
+
+		$url = $this->generateURl(self::ZENODO_API_DEPOSITIONS_LIST);
+		$result = self::curlIt(
+			$url, array(
+					'type' => self::REQUEST_TYPE_GET
+				)
+		);
+
+		return $result;
+	}
+
+	/**
 	 * Create a new deposition on Zenodo
 	 *
 	 * @param $metadata
@@ -133,8 +164,12 @@ class ApiService {
 		}
 
 		$url = $this->generateURl(self::ZENODO_API_DEPOSITIONS_CREATE);
-		$json = json_encode($metadata);
-		$result = self::curlIt($url, $json);
+		$result = self::curlIt(
+			$url, array(
+					'type'   => self::REQUEST_TYPE_POST,
+					'params' => json_encode($metadata)
+				)
+		);
 
 		if (property_exists($result, 'created')) {
 			return $result;
@@ -178,14 +213,21 @@ class ApiService {
 				);
 			}
 
-			$result = self::curlIt($url, $post, 'multipart/form-data');
+			$result = self::curlIt(
+				$url, array(
+						'type'         => self::REQUEST_TYPE_POST,
+						'params'       => $post,
+						'content-type' => 'multipart/form-data'
+					)
+			);
+
 		}
 
 		return true;
 	}
 
 
-	public static function curlIt($url, $post, $content_type = null) {
+	public static function curlIt($url, $data) {
 
 		$curl = curl_init($url);
 		//	curl_setopt($curl, CURLOPT_HEADER, false);
@@ -194,12 +236,26 @@ class ApiService {
 			$curl, CURLOPT_HTTPHEADER,
 			array(
 				sprintf(
-					'Content-type: %s', ($content_type == null) ? "application/json" : $content_type
+					'Content-type: %s',
+					(key_exists('content_type', $data)) ? $data['content_type'] : "application/json"
 				)
 			)
 		);
-		curl_setopt($curl, CURLOPT_POST, true);
-		curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
+
+		switch ($data['type']) {
+
+			case self::REQUEST_TYPE_POST:
+				curl_setopt($curl, CURLOPT_POST, true);
+				if (key_exists('params', $data)) {
+					curl_setopt($curl, CURLOPT_POSTFIELDS, $data['params']);
+				}
+				break;
+
+			case self::REQUEST_TYPE_GET:
+//				curl_setopt($curl, CURLOPT_POST, true);
+//				curl_setopt($curl, CURLOPT_POSTFIELDS, $data['post']);
+				break;
+		}
 
 		return json_decode(curl_exec($curl));
 	}
