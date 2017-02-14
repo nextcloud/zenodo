@@ -84,22 +84,37 @@ class ZenodoController extends Controller {
 	 * @NoCSRFRequired
 	 * @NoAdminRequired
 	 */
-	public function getDepositionsFromZenodo($production) {
+	public function getDepositionsFromZenodo() {
 
 		$iError = new iError();
 		$success = false;
 		$data = array();
 
-		if ($this->apiService->init(($production === 'true') ? true : false, $iError)
-			&& ($depositions =
-				$this->apiService->list_deposition($iError))
-		) {
+		if ($this->apiService->init(true, $iError)) {
 
+			$depositions = $this->apiService->list_deposition($iError);
 			foreach ($depositions as $entry) {
 				if ($entry->state === 'unsubmitted') {
 					$data[] = array(
-						'title'     => $entry->title,
-						'depositid' => $entry->id
+						'title'      => $entry->title,
+						'production' => 'true',
+						'depositid'  => $entry->id
+					);
+				}
+			}
+
+			$success = true;
+		}
+
+		if ($this->apiService->init(false, $iError)) {
+
+			$depositions = $this->apiService->list_deposition($iError);
+			foreach ($depositions as $entry) {
+				if ($entry->state === 'unsubmitted') {
+					$data[] = array(
+						'title'      => $entry->title,
+						'production' => 'false',
+						'depositid'  => $entry->id
 					);
 				}
 			}
@@ -133,12 +148,41 @@ class ZenodoController extends Controller {
 
 			$item = new DepositionFile();
 			$item->setFileId($fileid);
-			$item->setType((($production) ? 'prod' : 'sandbox'));
+			$item->setType((($production === 'true') ? 'prod' : 'sandbox'));
 			$item->setDepositId($deposition->id);
 			$this->depositionFilesMapper->insert(new DepositionFiles($item));
 
 			//DepositionFilesMapper::insertDeposition($result);
 
+
+			$published = true;
+		}
+
+		$response = array(
+			'error'     => $iError->toArray(),
+			'published' => $published
+		);
+
+		return $response;
+	}
+
+
+	/**
+	 * @NoCSRFRequired
+	 * @NoAdminRequired
+	 */
+	public function uploadToZenodo($depositid, $fileid, $production) {
+
+		$iError = new iError();
+		$published = false;
+		if ($this->apiService->init(($production === 'true') ? true : false, $iError)
+			&& $this->apiService->upload_file($depositid, $fileid, $iError)
+		) {
+			$item = new DepositionFile();
+			$item->setFileId($fileid);
+			$item->setType((($production === 'true') ? 'prod' : 'sandbox'));
+			$item->setDepositId($depositid);
+			$this->depositionFilesMapper->insert(new DepositionFiles($item));
 
 			$published = true;
 		}
@@ -160,6 +204,7 @@ class ZenodoController extends Controller {
 		$response = array(
 			'fileid'    => $fileid,
 			'filename'  => $filename,
+			'type'      => (($depositFile === null) ? '' : $depositFile->getType()),
 			'depositid' => (($depositFile === null) ? 0 : $depositFile->getDepositId())
 		);
 

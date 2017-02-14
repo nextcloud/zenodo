@@ -41,6 +41,11 @@ return [
 			'verb' => 'POST'
 		],
 		[
+			'name' => 'Zenodo#uploadToZenodo',
+			'url'  => 'ajax/uploadToZenodo.php',
+			'verb' => 'POST'
+		],
+		[
 			'name' => 'Zenodo#getZenodoDeposit',
 			'url'  => 'ajax/getZenodoDeposit.php',
 			'verb' => 'POST'
