@@ -45,7 +45,6 @@ $(document).ready(function () {
 				type: OCA.Files.FileActions.TYPE_DROPDOWN,
 				iconClass: 'icon-zenodo',
 				actionHandler: function (filename, context) {
-					zenodo_newdepo
 					zenodoActions.NewDeposition.detectPopup(filename, context);
 				}
 			});
@@ -85,7 +84,7 @@ $(document).ready(function () {
 				if (response == null)
 					return;
 
-				if (response.depositid == 0)
+				if (response.depositid == 0 || response.type == 'sandbox')
 					zenodoActions.NewDeposition.showPopup(response.fileid, response.filename);
 				else
 					window.alert("File was already uploaded to Zenodo");
@@ -248,8 +247,13 @@ $(document).ready(function () {
 
 		AddFile: {
 
+			listDeposit: [],
+			currentFileId: 0,
+
 			detectPopup: function (filename, context) {
 				var fileid = context.fileList.getModelForFile(filename).get('id');
+				currentFileId = fileid;
+
 				var data = {
 					fileid: fileid,
 					filename: filename
@@ -264,7 +268,7 @@ $(document).ready(function () {
 				if (response == null)
 					return;
 
-				if (response.depositid == 0)
+				if (response.depositid == 0 || response.type == 'sandbox')
 					zenodoActions.AddFile.showPopup(response.fileid, response.filename);
 				else
 					window.alert("File was already uploaded to Zenodo");
@@ -318,7 +322,7 @@ $(document).ready(function () {
 					});
 					$('#zenodo_dialog_upload').on('click', function () {
 						zenodoActions.AddFile.enableButtons(false);
-						zenodoActions.AddFile.publish(false);
+						zenodoActions.AddFile.upload();
 					});
 
 				} else {
@@ -357,24 +361,75 @@ $(document).ready(function () {
 			},
 
 			initDialog: function (response) {
-				//window.alert('ok');
 
 				$('#zendialog_deposition').append($('<option>', {
 					value: 0,
 					text: ''
 				}));
 
+				listDeposit = response.data;
 				response.data.forEach(function (item) {
-
-//					console.log('item:' + item.title);
-
 					$('#zendialog_deposition').append($('<option>', {
 						value: item.depositid,
 						text: item.title
 					}));
 				});
 
+			},
+
+
+			upload: function () {
+
+				if (self.published)
+					return;
+
+				listDeposit.forEach(function (item) {
+					if (item.depositid == $('#zendialog_deposition option:selected').val()) {
+
+						var data = {
+							depositid: item.depositid,
+							fileid: currentFileId,
+							production: item.production
+						};
+						$.post(OC.filePath('zenodo', 'ajax',
+							'uploadToZenodo.php'), data,
+							zenodoActions.AddFile.result);
+					}
+				});
+
+			},
+
+
+			result: function (response) {
+				if (response.published) {
+					zenodoActions.NewDeposition.enableButtons(true);
+
+					self.published = true;
+					$('#zenodo_dialog_upload').fadeTo(200, 0.3);
+					$('#zenodo_dialog_upload').off('click');
+
+					$('#zendialog_content').fadeOut(400, function () {
+						$('#zenodo_dialog').append(
+							'<div id="zenodo_end">Your file has been uploaded to Zenodo.org </div>');
+					});
+
+				} else {
+
+					zenodoActions.NewDeposition.enableButtons(true);
+					// $('#zenodo_dialog').prepend('<div id="zenodo_error"></div>');
+					// var i = 0;
+					// try {
+					// 	response.error.messages.forEach(function (item) {
+					// 		$('#zenodo_error').append(item
+					// 			+ '<br />');
+					// 		if (i++ >= 3) throw BreakException;
+					// 	});
+					// } catch (e) {
+					// }
+				}
+
 			}
+
 
 		}
 
