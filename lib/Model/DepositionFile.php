@@ -25,10 +25,11 @@
 
 namespace OCA\Zenodo\Model;
 
-class Deposition {
+class DepositionFile {
 
 	private $fileId;
-	private $zenId;
+	private $type;
+	private $depositId;
 
 	public function __construct() {
 
@@ -42,14 +43,25 @@ class Deposition {
 		return $this->fileId;
 	}
 
-	public function setZenId($zenId) {
-		$this->zenId = $zenId;
+	public function setType($type) {
+		$this->type = $type;
 	}
 
-	public function getZenId() {
-		return $this->userId;
+	public function getType() {
+		return $this->type;
 	}
 
+	public function setDepositId($depositId) {
+		$this->depositId = $depositId;
+	}
+
+	public function getDepositId() {
+		return $this->depositId;
+	}
+
+	public function toString() {
+		return "toto";
+	}
 }
 
 

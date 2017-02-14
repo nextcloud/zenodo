@@ -25,11 +25,11 @@
 
 namespace OCA\Zenodo\Service;
 
+
 use \OCA\Zenodo\Model\iError;
 use \OCA\Zenodo\Service\ConfigService;
 use \OCA\Zenodo\Service\FileService;
 use \OCA\Zenodo\Service\MiscService;
-use \OCA\Zenodo\Db\DepositionsMapper;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IRequest;
@@ -137,7 +137,6 @@ class ApiService {
 		$result = self::curlIt($url, $json);
 
 		if (property_exists($result, 'created')) {
-			//DepositionsMapper::insertDeposition($result);
 			return $result;
 		}
 
@@ -180,7 +179,6 @@ class ApiService {
 			}
 
 			$result = self::curlIt($url, $post, 'multipart/form-data');
-			$this->miscService->log(" file upload: " . var_export($result, true));
 		}
 
 		return true;

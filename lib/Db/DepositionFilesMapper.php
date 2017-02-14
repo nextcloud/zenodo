@@ -25,32 +25,40 @@
 
 namespace OCA\Zenodo\Db;
 
-use \OCA\Zenodo\Db\Depositions;
-use \OCA\Zenodo\Model\Deposition;
+//use \OCA\Zenodo\Db\DepositionFiles;
+//use \OCA\Zenodo\Model\DepositionFile;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IDBConnection;
 use OCP\AppFramework\Db\Mapper;
 
-class DepositionsMapper extends Mapper {
+class DepositionFilesMapper extends Mapper {
 
-	const TABLENAME = 'zenodo_depositions';
+	const TABLENAME = 'zenodo_depositions_files';
 
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, self::TABLENAME, 'OCA\Zenodo\Db\Depositions');
+		parent::__construct($db, self::TABLENAME, 'OCA\Zenodo\Db\DepositionFiles');
 	}
 
 	public function find($id) {
-		$sql = 'SELECT * FROM *PREFIX*' . self::TABLENAME . ' WHERE id = ?';
+		try {
+			$sql = sprintf('SELECT * FROM *PREFIX*%s WHERE id = ?', self::TABLENAME);
 
-		return $this->findEntity(
-			$sql, [
-					$id
-				]
-		);
-	}
-
-	public static function insertDeposition($deposition)
-	{
+			return $this->findEntity($sql, [$id]);
+		} catch (DoesNotExistException $dnee) {
+			return null;
+		}
 
 	}
+
+	public function findFile($fileId) {
+		try {
+			$sql = sprintf('SELECT * FROM *PREFIX*%s WHERE file_id = ?', self::TABLENAME);
+
+			return $this->findEntity($sql, [$fileId]);
+		} catch (DoesNotExistException $dnee) {
+			return null;
+		}
+	}
+
 }
 

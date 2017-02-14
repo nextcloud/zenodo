@@ -26,35 +26,60 @@ $(document).ready(function () {
 
 	var zenodoActions = {
 
-		New: {
+
+		init: function () {
+
+			var self = this;
+			self.currentFileId = '';
+			self.published = false;
+
+			// add a div to the <body>
+			if (!$('#zenodo_dialog').length)
+				$('body').append('<div id="zenodo_dialog" title="Zenodo"></div>');
+
+			OCA.Files.fileActions.registerAction({
+				name: 'zenodo',
+				displayName: t('zenodo', 'Create a new deposition'),
+				mime: 'all',
+				permissions: OC.PERMISSION_READ,
+				type: OCA.Files.FileActions.TYPE_DROPDOWN,
+				iconClass: 'icon-zenodo',
+				actionHandler: function (filename, context) {
+					zenodoActions.detectPopup(filename, context);
+				}
+			});
+
+		},
+
+
+		detectPopup: function (filename, context) {
+			var fileid = context.fileList.getModelForFile(filename).get('id');
+			var data = {
+				fileid: fileid,
+				filename: filename
+			};
+
+			$.post(OC.filePath('zenodo', 'ajax',
+				'getZenodoDeposit.php'), data, zenodoActions.detectPopupResult);
+		},
+
+
+		detectPopupResult: function (response) {
+			if (response == null)
+				return;
+
+			if (response.depositid == 0)
+				zenodoActions.NewDeposition.showPopup(response.fileid, response.filename);
+			else
+				window.alert("File was already uploaded to Zenodo");
+
+		},
+
+
+		NewDeposition: {
 			currentFileId: '',
 
-			init: function () {
-
-				var self = this;
-				self.currentFileId = '';
-				self.published = false;
-
-				// add a div to the <body>
-				if (!$('#zenodo_dialog').length)
-					$('body').append('<div id="zenodo_dialog" title="Zenodo"></div>');
-
-				OCA.Files.fileActions.registerAction({
-					name: 'zenodo',
-					displayName: t('zenodo', 'Create a new deposition'),
-					mime: 'all',
-					permissions: OC.PERMISSION_READ,
-					type: OCA.Files.FileActions.TYPE_DROPDOWN,
-					iconClass: 'icon-zenodo',
-					actionHandler: function (filename, context) {
-						zenodoActions.New.showPopup(filename, context);
-					}
-				});
-
-
-			},
-
-			showPopup: function (filename, context) {
+			showPopup: function (fileid, filename) {
 
 				if ($('#zenodo_end').length)
 					$('#zenodo_end').remove();
@@ -65,15 +90,16 @@ $(document).ready(function () {
 				if ($('#zenodo_dialog_buttons').length)
 					$('#zenodo_dialog_buttons').remove();
 
-				self.currentFileId = context.fileList.getModelForFile(filename).get('id');
+				self.currentFileId = fileid;
 				self.published = false;
 
 				$.get(OC.filePath('zenodo', 'ajax',
-					'getZenodoDialog.php'), {}, zenodoActions.New.fillPopup);
+					'getZenodoDialog.php'), {}, zenodoActions.NewDeposition.fillPopup
+				);
 
 				$('#zenodo_dialog').attr('title', 'Zenodo - ' + filename);
 				$('#zenodo_dialog').dialog();
-				// $('#zenodo_dialog').css('width', '700px').css('height', '400px');
+				$('#zenodo_dialog').css('width', '700px').css('height', '600px');
 				$('#zenodo_dialog').parent().css('width', '700px').css('height', '600px').css('top',
 					'100px').css('z-index', '9999');
 
@@ -85,6 +111,7 @@ $(document).ready(function () {
 				// $('#zenodo_dialog').parent().addClass('zenodo_dialog_shadow');
 			},
 
+
 			fillPopup: function (response) {
 
 				if (self.published)
@@ -92,7 +119,7 @@ $(document).ready(function () {
 
 				$('#zenodo_dialog').html(response);
 
-				zenodoActions.New.initDialog();
+				zenodoActions.NewDeposition.initDialog();
 
 				setTimeout(function () {
 					$('#zenodo_dialog').parent().append('<div id="zenodo_dialog_buttons"></div>');
@@ -104,7 +131,7 @@ $(document).ready(function () {
 							'<div id="zenodo_dialog_production" class="zenodo_dialog_button">Publish (production)</div>').fadeIn(
 						400);
 
-					zenodoActions.New.enableButtons(true);
+					zenodoActions.NewDeposition.enableButtons(true);
 
 					$('#zenodo_dialog').parent().animate(
 						{boxShadow: "3px 3px 5px rgba(81, 81, 81, 0.40)"});
@@ -123,16 +150,16 @@ $(document).ready(function () {
 					$('#zenodo_dialog_buttons').fadeTo(200, 1);
 
 					$('#zenodo_dialog_close').on('click', function () {
-						zenodoActions.New.enableButtons(false);
+						zenodoActions.NewDeposition.enableButtons(false);
 						$('#zenodo_dialog').dialog('close');
 					});
 					$('#zenodo_dialog_sandbox').on('click', function () {
-						zenodoActions.New.enableButtons(false);
-						zenodoActions.New.publish(false);
+						zenodoActions.NewDeposition.enableButtons(false);
+						zenodoActions.NewDeposition.publish(false);
 					});
 					$('#zenodo_dialog_production').on('click', function () {
-						zenodoActions.New.enableButtons(false);
-						zenodoActions.New.publish(true);
+						zenodoActions.NewDeposition.enableButtons(false);
+						zenodoActions.NewDeposition.publish(true);
 					});
 
 				} else {
@@ -141,6 +168,7 @@ $(document).ready(function () {
 				}
 
 			},
+
 
 			initDialog: function () {
 
@@ -166,13 +194,14 @@ $(document).ready(function () {
 				};
 
 				$.post(OC.filePath('zenodo', 'ajax',
-					'publishToZenodo.php'), data, zenodoActions.New.result);
+					'publishToZenodo.php'), data, zenodoActions.NewDeposition.result);
 			},
+
 
 			result: function (response) {
 				//	window.alert("response: " + response);
 				if (response.published) {
-					zenodoActions.New.enableButtons(true);
+					zenodoActions.NewDeposition.enableButtons(true);
 
 					self.published = true;
 					$('#zenodo_dialog_sandbox').fadeTo(200, 0.3);
@@ -186,7 +215,7 @@ $(document).ready(function () {
 					});
 				}
 				else {
-					zenodoActions.New.enableButtons(true);
+					zenodoActions.NewDeposition.enableButtons(true);
 					$('#zenodo_dialog').prepend('<div id="zenodo_error"></div>');
 					var i = 0;
 					try {
@@ -200,10 +229,19 @@ $(document).ready(function () {
 				}
 
 			}
+		},
+
+
+		AddFile: {
+
+			showPopup: function (filename, context) {
+			}
+
 		}
+
 	};
 
-	zenodoActions.New.init();
+	zenodoActions.init();
 });
 
 

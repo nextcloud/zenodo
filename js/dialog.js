@@ -164,12 +164,12 @@ var zenodoDialog = {
 			orcid = ' - ' + orcid;
 
 		for (i = 0; i < zenodoDialog.currentCreators.length; i++) {
-			if (zenodoDialog.currentCreators[i].realname == realname)
+			if (zenodoDialog.currentCreators[i].name == realname)
 				return;
 		}
 
 		zenodoDialog.currentCreators.push({
-			realname: realname,
+			name: realname,
 			orcid: orcid
 		});
 		$('#zendialog_creators_list').append(
@@ -186,7 +186,7 @@ var zenodoDialog = {
 	remCreator: function (realname) {
 		tmpCreators = [];
 		for (i = 0; i < zenodoDialog.currentCreators.length; i++) {
-			if (zenodoDialog.currentCreators[i].realname != realname)
+			if (zenodoDialog.currentCreators[i].name != realname)
 				tmpCreators.push(zenodoDialog.currentCreators[i]);
 		}
 		zenodoDialog.currentCreators = tmpCreators;
@@ -194,7 +194,7 @@ var zenodoDialog = {
 
 
 	metadata: function () {
-		var creators = [{name: $('#zendialog_creators').val()}];
+		//var creators = [{name: $('#zendialog_creators').val()}];
 
 		var data = {
 			upload_type: $('#zendialog_uploadtype option:selected').val(),
@@ -202,7 +202,7 @@ var zenodoDialog = {
 			image_type: $('#zendialog_imagetype option:selected').val(),
 			publication_date: $('#zendialog_publicationdate').val(),
 			title: $('#zendialog_title').val(),
-			creators: creators,
+			creators: zenodoDialog.currentCreators,
 			description: $('#zendialog_description').val(),
 			access_right: $('#zendialog_accessright option:selected').val(),
 			embargo_date: $('#zendialog_embargodate').val(),

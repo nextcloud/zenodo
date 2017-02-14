@@ -31,13 +31,13 @@ use \OCA\Zenodo\Service\ConfigService;
 use \OCA\Zenodo\Service\ApiService;
 use \OCA\Zenodo\Service\FileService;
 use \OCA\Zenodo\Service\MiscService;
+use \OCA\Zenodo\Db\DepositionFilesMapper;
 use OCP\AppFramework\App;
 use OCP\Util;
 
 class Application extends App {
 
 	/**
-	 *
 	 * @param array $params
 	 */
 	public function __construct(array $params = array()) {
@@ -52,6 +52,7 @@ class Application extends App {
 			return new MiscService($c->query('Logger'), $c->query('AppName'));
 		}
 		);
+
 
 		$container->registerService(
 			'ConfigService', function ($c) {
@@ -97,7 +98,21 @@ class Application extends App {
 				$c->query('UserManager'),
 				$c->query('ConfigService'),
 				$c->query('ApiService'),
+				$c->query('DepositionFilesMapper'),
 				$c->query('MiscService')
+			);
+		}
+		);
+
+
+		/**
+		 * Mapper
+		 */
+		$container->registerService(
+			'DepositionFilesMapper', function ($c) {
+			return new DepositionFilesMapper(
+				$c->query('ServerContainer')
+				  ->getDatabaseConnection()
 			);
 		}
 		);

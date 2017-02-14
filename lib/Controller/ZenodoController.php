@@ -29,6 +29,9 @@ use \OCA\Zenodo\Model\iError;
 use \OCA\Zenodo\Service\ConfigService;
 use OCA\Zenodo\Service\MiscService;
 use OCA\Zenodo\Service\ApiService;
+use OCA\Zenodo\Model\DepositionFile;
+use \OCA\Zenodo\Db\DepositionFilesMapper;
+use \OCA\Zenodo\Db\DepositionFiles;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IRequest;
@@ -39,11 +42,13 @@ class ZenodoController extends Controller {
 	private $userManager;
 	private $configService;
 	private $apiService;
+	private $depositionFilesMapper;
 	private $miscService;
 
 	public function __construct(
 		$appName, IRequest $request, $userId, $userManager, ConfigService $configService,
 		ApiService $apiService,
+		DepositionFilesMapper $depositionFilesMapper,
 		MiscService $miscService
 	) {
 		parent::__construct($appName, $request);
@@ -51,6 +56,7 @@ class ZenodoController extends Controller {
 		$this->userManager = $userManager;
 		$this->configService = $configService;
 		$this->apiService = $apiService;
+		$this->depositionFilesMapper = $depositionFilesMapper;
 		$this->miscService = $miscService;
 	}
 
@@ -80,6 +86,16 @@ class ZenodoController extends Controller {
 				$this->apiService->create_deposition(array('metadata' => $metadata), $iError))
 			&& $this->apiService->upload_file($deposition->id, $fileid, $iError)
 		) {
+
+			$item = new DepositionFile();
+			$item->setFileId($fileid);
+			$item->setType((($production) ? 'prod' : 'sandbox'));
+			$item->setDepositId($deposition->id);
+			$this->depositionFilesMapper->insert(new DepositionFiles($item));
+
+			//DepositionFilesMapper::insertDeposition($result);
+
+
 			$published = true;
 		}
 
@@ -91,10 +107,27 @@ class ZenodoController extends Controller {
 		return $response;
 	}
 
+
+	/**
+	 * @NoAdminRequired
+	 */
+	public function getZenodoDeposit($fileid, $filename) {
+		$depositFile = $this->depositionFilesMapper->findfile($fileid);
+		$response = array(
+			'fileid'    => $fileid,
+			'filename'  => $filename,
+			'depositid' => (($depositFile === null) ? 0 : $depositFile->getDepositId())
+		);
+
+		return $response;
+	}
+
+
 	/**
 	 * @NoAdminRequired
 	 */
 	public function getLocalCreator($username) {
+
 		if ($username === '_self') {
 			$username = $this->userId;
 		}
@@ -120,3 +153,6 @@ class ZenodoController extends Controller {
 		return $response;
 	}
 }
+
+
+
