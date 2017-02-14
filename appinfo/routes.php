@@ -46,6 +46,11 @@ return [
 			'verb' => 'POST'
 		],
 		[
+			'name' => 'Zenodo#getDepositionsFromZenodo',
+			'url'  => 'ajax/getDepositionsFromZenodo.php',
+			'verb' => 'POST'
+		],
+		[
 			'name' => 'Zenodo#dialogZenodo',
 			'url'  => 'ajax/getZenodoDialog.php',
 			'verb' => 'GET'

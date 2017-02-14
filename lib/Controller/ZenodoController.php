@@ -84,6 +84,43 @@ class ZenodoController extends Controller {
 	 * @NoCSRFRequired
 	 * @NoAdminRequired
 	 */
+	public function getDepositionsFromZenodo($production) {
+
+		$iError = new iError();
+		$success = false;
+		$data = array();
+
+		if ($this->apiService->init(($production === 'true') ? true : false, $iError)
+			&& ($depositions =
+				$this->apiService->list_deposition($iError))
+		) {
+
+			foreach ($depositions as $entry) {
+				$this->miscService->log(">>> " . $entry->title);
+				$data[] = array(
+					'title'     => $entry->title,
+					'depositid' => $entry->id,
+					'doi'       => $entry->doi
+				);
+			}
+
+			$success = true;
+		}
+
+		$response = array(
+			'error'   => $iError->toArray(),
+			'success' => $success,
+			'data'    => $data
+		);
+
+		return $response;
+	}
+
+
+	/**
+	 * @NoCSRFRequired
+	 * @NoAdminRequired
+	 */
 	public function publishToZenodo($fileid, $metadata, $production) {
 
 		$iError = new iError();
