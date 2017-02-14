@@ -38,46 +38,59 @@ $(document).ready(function () {
 				$('body').append('<div id="zenodo_dialog" title="Zenodo"></div>');
 
 			OCA.Files.fileActions.registerAction({
-				name: 'zenodo',
+				name: 'zenodo_newdepo',
 				displayName: t('zenodo', 'Create a new deposition'),
 				mime: 'all',
 				permissions: OC.PERMISSION_READ,
 				type: OCA.Files.FileActions.TYPE_DROPDOWN,
 				iconClass: 'icon-zenodo',
 				actionHandler: function (filename, context) {
-					zenodoActions.detectPopup(filename, context);
+					zenodo_newdepo
+					zenodoActions.NewDeposition.detectPopup(filename, context);
+				}
+			});
+
+			OCA.Files.fileActions.registerAction({
+				name: 'zenodo_addfile',
+				displayName: t('zenodo', 'Add this file to a deposition'),
+				mime: 'all',
+				permissions: OC.PERMISSION_READ,
+				type: OCA.Files.FileActions.TYPE_DROPDOWN,
+				iconClass: 'icon-zenodo',
+				actionHandler: function (filename, context) {
+					zenodoActions.AddFile.detectPopup(filename, context);
 				}
 			});
 
 		},
 
 
-		detectPopup: function (filename, context) {
-			var fileid = context.fileList.getModelForFile(filename).get('id');
-			var data = {
-				fileid: fileid,
-				filename: filename
-			};
-
-			$.post(OC.filePath('zenodo', 'ajax',
-				'getZenodoDeposit.php'), data, zenodoActions.detectPopupResult);
-		},
-
-
-		detectPopupResult: function (response) {
-			if (response == null)
-				return;
-
-			if (response.depositid == 0)
-				zenodoActions.NewDeposition.showPopup(response.fileid, response.filename);
-			else
-				window.alert("File was already uploaded to Zenodo");
-
-		},
-
-
 		NewDeposition: {
+
 			currentFileId: '',
+
+			detectPopup: function (filename, context) {
+				var fileid = context.fileList.getModelForFile(filename).get('id');
+				var data = {
+					fileid: fileid,
+					filename: filename
+				};
+
+				$.post(OC.filePath('zenodo', 'ajax',
+					'getZenodoDeposit.php'), data, zenodoActions.NewDeposition.detectPopupResult);
+			},
+
+
+			detectPopupResult: function (response) {
+				if (response == null)
+					return;
+
+				if (response.depositid == 0)
+					zenodoActions.NewDeposition.showPopup(response.fileid, response.filename);
+				else
+					window.alert("File was already uploaded to Zenodo");
+			},
+
 
 			showPopup: function (fileid, filename) {
 
@@ -94,7 +107,8 @@ $(document).ready(function () {
 				self.published = false;
 
 				$.get(OC.filePath('zenodo', 'ajax',
-					'getZenodoDialog.php'), {}, zenodoActions.NewDeposition.fillPopup
+					'getZenodoDialog.php'), {type: 'NewDeposition'},
+					zenodoActions.NewDeposition.fillPopup
 				);
 
 				$('#zenodo_dialog').attr('title', 'Zenodo - ' + filename);
@@ -234,14 +248,90 @@ $(document).ready(function () {
 
 		AddFile: {
 
-			showPopup: function (filename, context) {
+			detectPopup: function (filename, context) {
+				var fileid = context.fileList.getModelForFile(filename).get('id');
+				var data = {
+					fileid: fileid,
+					filename: filename
+				};
+
+				$.post(OC.filePath('zenodo', 'ajax',
+					'getZenodoDeposit.php'), data, zenodoActions.AddFile.detectPopupResult);
+			},
+
+
+			detectPopupResult: function (response) {
+				if (response == null)
+					return;
+
+				if (response.depositid == 0)
+					zenodoActions.AddFile.showPopup(response.fileid, response.filename);
+				else
+					window.alert("File was already uploaded to Zenodo");
+			},
+
+
+			showPopup: function (fileid, filename) {
+
+				$.get(OC.filePath('zenodo', 'ajax',
+					'getZenodoDialog.php'), {type: 'AddFile'}, zenodoActions.AddFile.fillPopup
+				);
+				//
+				// $('#zenodo_dialog').attr('title', 'Zenodo - ' + filename);
+				// $('#zenodo_dialog').dialog();
+				// $('#zenodo_dialog').css('width', '700px').css('height', '600px');
+				// $('#zenodo_dialog').parent().css('width', '700px').css('height',
+				// '600px').css('top', '100px').css('z-index', '9999');
+				// $('#zenodo_dialog').parent().css('box-shadow', '0px 0px 0px #5151514D');
+				// $('#zenodo_dialog').parent().css('moz-box-shadow', '0px 0px 0px #5151514D');
+				// $('#zenodo_dialog').parent().css('-webkit-box-shadow', '0px 0px 0px #5151514D');
+
+				// uncomment this line if you want to remove the shadow animation
+				// $('#zenodo_dialog').parent().addClass('zenodo_dialog_shadow');
+			},
+
+
+			fillPopup: function (response) {
+
+				$.post(OC.filePath('zenodo', 'ajax',
+					'getDepositionsFromZenodo.php'), {}, zenodoActions.AddFile.initDialog
+				);
+
+				// if (self.published)
+				// 	return;
+				//
+				// $('#zenodo_dialog').html(response);
+				//
+				// zenodoActions.NewDeposition.initDialog();
+				//
+				// setTimeout(function () {
+				// 	$('#zenodo_dialog').parent().append('<div
+				// id="zenodo_dialog_buttons"></div>'); $('#zenodo_dialog_buttons').hide();
+				// $('#zenodo_dialog_buttons').append( '<div id="zenodo_dialog_close"
+				// class="zenodo_dialog_button">Close</div>').append( '<div
+				// id="zenodo_dialog_sandbox" class="zenodo_dialog_button">Publish
+				// (sandbox)</div>') .append( '<div id="zenodo_dialog_production"
+				// class="zenodo_dialog_button">Publish (production)</div>').fadeIn( 400);
+				// zenodoActions.NewDeposition.enableButtons(true);
+				// $('#zenodo_dialog').parent().animate( {boxShadow: "3px 3px 5px rgba(81, 81, 81,
+				// 0.40)"});  }, 500);
+			},
+
+			initDialog: function (response) {
+				//window.alert('ok');
+				response.data.forEach(function (item) {
+
+					console.log('item:' + item.title);
+				});
+
 			}
 
 		}
 
-	};
+	}
 
 	zenodoActions.init();
+
 });
 
 
