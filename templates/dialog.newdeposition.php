@@ -98,8 +98,8 @@
 				<div id="zendialog_creator_search_result"></div>
 			</td>
 			<td class="zendialog_creator">
-				<div><input type="text" id="zendialog_creator_realname" style="width: 244px">
-					<input type="text" id="zendialog_creator_orcid" style="width: 150px">
+				<div><input type="text" id="zendialog_creator_realname" placeholder="Lastname, Firstname" style="width: 244px">
+					<input type="text" id="zendialog_creator_orcid" placeholder="ORCID" style="width: 150px">
 					<div id="zendialog_create_add"></div>
 				</div>
 				<div id="zendialog_creator_syntax_error">Name of creator must be in the format <b>Family
