@@ -230,7 +230,7 @@ class ZenodoController extends Controller {
 			$realname = $user->getDisplayName();
 
 			if (\OCP\App::isEnabled('orcid')) {
-				$orcid = \OCA\Orcid\Service\StaticService::getUserOrcid($username);
+				$orcid = \OCA\Orcid\Service\ApiService::getUserOrcid($username);
 			}
 		}
 
