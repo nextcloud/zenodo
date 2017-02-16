@@ -64,16 +64,36 @@ $(document).ready(function () {
 		},
 
 
+		loading: function (load) {
+			if (!$('#zenodo_loading').length) {
+
+				$('#zenodo_dialog').append('<div id="zenodo_loading"></div>');
+				$('#zenodo_loading').hide();
+				$('#zenodo_loading').css('background-image',
+					'url(' + OC.imagePath('zenodo', 'loading') + ')');
+			}
+
+			if (load) {
+				$('#zenodo_loading').fadeIn(300);
+			}
+			else {
+				$('#zenodo_loading').fadeOut(300);
+			}
+
+		},
+
 		NewDeposition: {
 
 			currentFileId: '',
 
 			detectPopup: function (filename, context) {
+
 				var fileid = context.fileList.getModelForFile(filename).get('id');
 				var data = {
 					fileid: fileid,
 					filename: filename
 				};
+
 
 				$.post(OC.filePath('zenodo', 'ajax',
 					'getZenodoDeposit.php'), data, zenodoActions.NewDeposition.detectPopupResult);
@@ -122,6 +142,7 @@ $(document).ready(function () {
 
 				// uncomment this line if you want to remove the shadow animation
 				// $('#zenodo_dialog').parent().addClass('zenodo_dialog_shadow');
+
 			},
 
 
@@ -150,6 +171,8 @@ $(document).ready(function () {
 						{boxShadow: "3px 3px 5px rgba(81, 81, 81, 0.40)"});
 
 				}, 500);
+
+				zenodoActions.loading(false);
 			},
 
 
@@ -197,6 +220,8 @@ $(document).ready(function () {
 				if (self.published)
 					return;
 
+				zenodoActions.loading(true);
+
 				if ($('#zenodo_error').length)
 					$('#zenodo_error').remove();
 
@@ -210,9 +235,10 @@ $(document).ready(function () {
 					'publishToZenodo.php'), data, zenodoActions.NewDeposition.result);
 			},
 
-
 			result: function (response) {
 				//	window.alert("response: " + response);
+				zenodoActions.loading(false);
+
 				if (response.published) {
 					zenodoActions.NewDeposition.enableButtons(true);
 
@@ -336,7 +362,7 @@ $(document).ready(function () {
 			fillPopup: function (response) {
 
 				$.post(OC.filePath('zenodo', 'ajax',
-					'getDepositionsFromZenodo.php'), {}, zenodoActions.AddFile.initDialog
+					'getUnsubmittedDepositionsFromZenodo.php'), {}, zenodoActions.AddFile.initDialog
 				);
 
 
@@ -344,7 +370,6 @@ $(document).ready(function () {
 					return;
 
 				$('#zenodo_dialog').html(response);
-
 
 				setTimeout(function () {
 					$('#zenodo_dialog').parent().append('<div id="zenodo_dialog_buttons"></div>');
@@ -358,6 +383,8 @@ $(document).ready(function () {
 						boxShadow: "3px 3px 5px rgba(81, 81, 81, 0.40)"
 					});
 				}, 500);
+
+				zenodoActions.loading(false);
 			},
 
 			initDialog: function (response) {
@@ -383,6 +410,8 @@ $(document).ready(function () {
 				if (self.published)
 					return;
 
+				zenodoActions.loading(true);
+
 				listDeposit.forEach(function (item) {
 					if (item.depositid == $('#zendialog_deposition option:selected').val()) {
 
@@ -401,6 +430,9 @@ $(document).ready(function () {
 
 
 			result: function (response) {
+
+				zenodoActions.loading(false);
+
 				if (response.published) {
 					zenodoActions.NewDeposition.enableButtons(true);
 
