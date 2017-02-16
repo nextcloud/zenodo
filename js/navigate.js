@@ -112,8 +112,8 @@ $(document).ready(function () {
 
 				$('#zenodo_dialog').attr('title', 'Zenodo - New Deposition - ' + filename);
 				$('#zenodo_dialog').dialog();
-				$('#zenodo_dialog').css('width', '700px').css('height', '600px');
-				$('#zenodo_dialog').parent().css('width', '700px').css('height', '600px').css('top',
+				$('#zenodo_dialog').css('width', '800px').css('height', '600px');
+				$('#zenodo_dialog').parent().css('width', '800px').css('height', '600px').css('top',
 					'100px').css('z-index', '9999');
 
 				$('#zenodo_dialog').parent().css('box-shadow', '0px 0px 0px #5151514D');
