@@ -168,10 +168,12 @@ var zenodoDialog = {
 				return;
 		}
 
-		zenodoDialog.currentCreators.push({
-			name: realname,
-			orcid: orcid
-		});
+		var entry = {
+			name: realname
+		}
+		if (orcid != '') entry.orcid = orcid;
+
+		zenodoDialog.currentCreators.push(entry);
 		$('#zendialog_creators_list').append(
 			'<div class="zenodo_creator_item" itemvalue="' + realname + '">' + realname + orcid +
 			'</div>');
