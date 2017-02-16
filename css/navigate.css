@@ -6,6 +6,16 @@ BUTTON.ui-dialog-titlebar-close {
 	visibility: hidden;
 }
 
+#zenodo_loading {
+	height: 40px;
+	width: 40px;
+	position: absolute;
+	left: 45%;
+	top: 50%;
+	background-size: contain;
+	margin: 0 auto;
+}
+
 #zenodo_dialog {
 	height: 100%;
 }
