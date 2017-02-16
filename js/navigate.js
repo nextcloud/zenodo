@@ -312,6 +312,8 @@ $(document).ready(function () {
 				if ($('#zenodo_dialog_buttons').length)
 					$('#zenodo_dialog_buttons').remove();
 
+				self.published = false;
+
 				$('#zendialog_deposition').html('');
 
 				$.get(OC.filePath('zenodo', 'ajax',
