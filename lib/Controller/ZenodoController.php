@@ -38,6 +38,7 @@ use OCP\IRequest;
 
 class ZenodoController extends Controller {
 
+
 	private $userId;
 	private $userManager;
 	private $configService;
@@ -84,38 +85,44 @@ class ZenodoController extends Controller {
 	 * @NoCSRFRequired
 	 * @NoAdminRequired
 	 */
-	public function getDepositionsFromZenodo() {
+	public function getUnsubmittedDepositionsFromZenodo() {
 
 		$iError = new iError();
 		$success = false;
 		$data = array();
-
-		if ($this->apiService->init(true, $iError)) {
-
-			$depositions = $this->apiService->list_deposition($iError);
-			foreach ($depositions as $entry) {
-				if ($entry->state === 'unsubmitted') {
-					$data[] = array(
-						'title'      => $entry->title,
-						'production' => 'true',
-						'depositid'  => $entry->id
-					);
-				}
-			}
-
-			$success = true;
-		}
 
 		if ($this->apiService->init(false, $iError)) {
 
 			$depositions = $this->apiService->list_deposition($iError);
 			foreach ($depositions as $entry) {
 				if ($entry->state === 'unsubmitted') {
-					$data[] = array(
-						'title'      => $entry->title,
-						'production' => 'false',
-						'depositid'  => $entry->id
-					);
+					$more = $this->depositionFilesMapper->findDeposit($entry->id);
+					if ($more !== null && $more->getUserId() === $this->userId) {
+						$data[] = array(
+							'title'      => '(sandbox) ' . $entry->title,
+							'production' => 'false',
+							'depositid'  => $entry->id
+						);
+					}
+				}
+			}
+
+			$success = true;
+		}
+
+		if ($this->apiService->init(true, $iError)) {
+
+			$depositions = $this->apiService->list_deposition($iError);
+			foreach ($depositions as $entry) {
+				if ($entry->state === 'unsubmitted') {
+					$more = $this->depositionFilesMapper->findDeposit($entry->id);
+					if ($more !== null && $more->getUserId() === $this->userId) {
+						$data[] = array(
+							'title'      => $entry->title,
+							'production' => 'true',
+							'depositid'  => $entry->id
+						);
+					}
 				}
 			}
 
@@ -148,8 +155,10 @@ class ZenodoController extends Controller {
 
 			$item = new DepositionFile();
 			$item->setFileId($fileid);
+			$item->setUserId($this->userId);
 			$item->setType((($production === 'true') ? 'prod' : 'sandbox'));
 			$item->setDepositId($deposition->id);
+			$this->depositionFilesMapper->deleteFile(new DepositionFiles($item), false);
 			$this->depositionFilesMapper->insert(new DepositionFiles($item));
 
 			//DepositionFilesMapper::insertDeposition($result);
@@ -175,18 +184,26 @@ class ZenodoController extends Controller {
 
 		$iError = new iError();
 		$published = false;
-		if ($this->apiService->init(($production === 'true') ? true : false, $iError)
-			&& $this->apiService->upload_file($depositid, $fileid, $iError)
-		) {
-			$item = new DepositionFile();
-			$item->setFileId($fileid);
-			$item->setType((($production === 'true') ? 'prod' : 'sandbox'));
-			$item->setDepositId($depositid);
-			$this->depositionFilesMapper->insert(new DepositionFiles($item));
 
-			$published = true;
+		$more = $this->depositionFilesMapper->findDeposit($depositid);
+		if ($more === null || $more->getUserId() !== $this->userId) {
+			$iError->setMessage("This is not your deposition");
+		} else {
+
+			if ($this->apiService->init(($production === 'true') ? true : false, $iError)
+				&& $this->apiService->upload_file($depositid, $fileid, $iError)
+			) {
+				$item = new DepositionFile();
+				$item->setFileId($fileid);
+				$item->setUserId($this->userId);
+				$item->setType((($production === 'true') ? 'prod' : 'sandbox'));
+				$item->setDepositId($depositid);
+				$this->depositionFilesMapper->deleteFile(new DepositionFiles($item), false);
+				$this->depositionFilesMapper->insert(new DepositionFiles($item));
+
+				$published = true;
+			}
 		}
-
 		$response = array(
 			'error'     => $iError->toArray(),
 			'published' => $published

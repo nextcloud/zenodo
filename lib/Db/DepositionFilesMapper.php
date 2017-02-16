@@ -60,5 +60,36 @@ class DepositionFilesMapper extends Mapper {
 		}
 	}
 
+
+
+	public function findDeposit($depositId) {
+		try {
+			$sql = sprintf('SELECT * FROM *PREFIX*%s WHERE deposit_id = ?', self::TABLENAME);
+
+			return $this->findEntity($sql, [$depositId]);
+		} catch (DoesNotExistException $dnee) {
+			return null;
+		}
+	}
+
+
+	// force will delete whichever type of the entry. if not, only delete sandbox entry
+	public function deleteFile(DepositionFiles $entry, $force) {
+		try {
+			$sql = sprintf(
+				'DELETE FROM *PREFIX*%s WHERE file_id = ? %s', self::TABLENAME,
+				(($force) ? '' : "AND type='sandbox'")
+			);
+
+			return $this->execute($sql, [$entry->getFileId()]);
+
+		} catch (DoesNotExistException $dnee) {
+			return null;
+		}
+
+		return $entry;
+	}
+
+
 }
 
