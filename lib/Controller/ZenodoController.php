@@ -27,9 +27,9 @@ namespace OCA\Zenodo\Controller;
 
 use \OCA\Zenodo\Model\iError;
 use \OCA\Zenodo\Service\ConfigService;
-use OCA\Zenodo\Service\MiscService;
-use OCA\Zenodo\Service\ApiService;
-use OCA\Zenodo\Model\DepositionFile;
+use \OCA\Zenodo\Service\MiscService;
+use \OCA\Zenodo\Service\ApiService;
+use \OCA\Zenodo\Model\DepositionFile;
 use \OCA\Zenodo\Db\DepositionFilesMapper;
 use \OCA\Zenodo\Db\DepositionFiles;
 use OCP\AppFramework\Controller;
