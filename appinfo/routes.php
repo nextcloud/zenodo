@@ -51,8 +51,8 @@ return [
 			'verb' => 'POST'
 		],
 		[
-			'name' => 'Zenodo#getDepositionsFromZenodo',
-			'url'  => 'ajax/getDepositionsFromZenodo.php',
+			'name' => 'Zenodo#getUnsubmittedDepositionsFromZenodo',
+			'url'  => 'ajax/getUnsubmittedDepositionsFromZenodo.php',
 			'verb' => 'POST'
 		],
 		[
