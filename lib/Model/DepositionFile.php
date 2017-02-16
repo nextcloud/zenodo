@@ -28,6 +28,7 @@ namespace OCA\Zenodo\Model;
 class DepositionFile {
 
 	private $fileId;
+	private $userId;
 	private $type;
 	private $depositId;
 
@@ -49,6 +50,14 @@ class DepositionFile {
 
 	public function getType() {
 		return $this->type;
+	}
+
+	public function setUserId($userId) {
+		$this->userId = $userId;
+	}
+
+	public function getUserId() {
+		return $this->userId;
 	}
 
 	public function setDepositId($depositId) {

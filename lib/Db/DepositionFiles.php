@@ -30,6 +30,7 @@ use OCP\AppFramework\Db\Entity;
 
 class DepositionFiles extends Entity {
 
+	public $userId;
 	public $fileId;
 	public $type;
 	public $depositId;
@@ -37,6 +38,7 @@ class DepositionFiles extends Entity {
 	public function __construct(DepositionFile $item = null) {
 		if ($item != null) {
 			$this->setFileId($item->getFileId());
+			$this->setUserId($item->getUserId());
 			$this->setType($item->getType());
 			$this->setDepositId($item->getDepositId());
 		}
