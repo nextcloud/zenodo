@@ -221,7 +221,7 @@ class ApiService {
 					)
 			);
 
-			if ($result->status === 400) {
+			if (property_exists($result, 'status') && $result->status === 400) {
 				$iError = new iError();
 				$iError->setCode($result->status)
 					   ->setMessage(
