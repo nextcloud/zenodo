@@ -237,7 +237,7 @@ class ApiService {
 			array(
 				sprintf(
 					'Content-type: %s',
-					(key_exists('content_type', $data)) ? $data['content_type'] : "application/json"
+					(key_exists('content-type', $data)) ? $data['content-type'] : "application/json"
 				)
 			)
 		);
