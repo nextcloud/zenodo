@@ -221,6 +221,15 @@ class ApiService {
 					)
 			);
 
+			if ($result->status === 400) {
+				$iError = new iError();
+				$iError->setCode($result->status)
+					   ->setMessage(
+						   'Problems occurs while uploading your document. Contact your administrator'
+					   );
+
+				return false;
+			}
 		}
 
 		return true;
