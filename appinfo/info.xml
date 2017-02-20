@@ -10,14 +10,14 @@
 	<author>Maxence Lange</author>
 	<author>Lars Næsbye Christensen</author>
 	<documentation>
-		<admin>https://github.com/nextcloud-gmbh/zenodo/wiki</admin>
+		<admin>https://github.com/nextcloud/zenodo/wiki</admin>
 	</documentation>
 	<category>tools</category>
 	<category>files</category>
-	<website>https://github.com/nextcloud-gmbh/zenodo</website>
-	<bugs>https://github.com/nextcloud-gmbh/zenodo/issues</bugs>
-	<repository type="git">https://github.com/nextcloud-gmbh/zenodo.git</repository>
-	<screenshot>https://raw.githubusercontent.com/nextcloud-gmbh/zenodo/master/screenshots/dialogpopup.png</screenshot>
+	<website>https://github.com/nextcloud/zenodo</website>
+	<bugs>https://github.com/nextcloud/zenodo/issues</bugs>
+	<repository type="git">https://github.com/nextcloud/zenodo.git</repository>
+	<screenshot>https://raw.githubusercontent.com/nextcloud/zenodo/master/screenshots/dialogpopup.png</screenshot>
 	<dependencies>
 		<owncloud min-version="9.0" max-version="9.2"/>
 		<nextcloud min-version="9" max-version="12"/>
