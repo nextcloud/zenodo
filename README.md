@@ -1,3 +1,5 @@
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/nextcloud/zenodo/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/nextcloud/zenodo/?branch=master)
+
 Based on files_zenodo from Lars Naesbye Christensen, DeIC for ownCloud - https://github.com/deic-dk/files_zenodo
 
 # Publish your work on Zenodo.org
