@@ -3,6 +3,8 @@ OC.L10N.register(
     {
     "Create a new deposition" : "Yeni bir ifade ekle",
     "Add this file to a deposition" : "Bu dosyayı bir ifadeye ekle",
-    "Zenodo" : "Zenodo"
+    "Zenodo" : "Zenodo",
+    "Publish your work to Zenodo.org" : "Çalışmalarınızı zenodo.org üzerinde yayınlayın",
+    "based on files_zenodo written by Lars Næsbye Christensen, DeIC" : "Lars Næsbye Christensen, DeIC tarafından yazılmış files_zenodo kodunun üzerine geliştirilmiştir"
 },
 "nplurals=2; plural=(n > 1);");
