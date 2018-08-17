@@ -5,7 +5,7 @@
 	<name>Zenodo</name>
 	<summary>Publish your work to Zenodo.org</summary>
 	<description>based on files_zenodo written by Lars Næsbye Christensen, DeIC</description>
-	<version>0.9.4</version>
+	<version>1.0.0</version>
 	<licence>agpl</licence>
 	<author>Maxence Lange</author>
 	<author>Lars Næsbye Christensen</author>
