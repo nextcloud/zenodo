@@ -5,6 +5,7 @@ OC.L10N.register(
     "Add this file to a deposition" : "Hozzáadás egy fájl lerakathoz",
     "Zenodo" : "Zenodo",
     "Publish your work to Zenodo.org" : "Oszd meg a munkádat a Zenodo.org-ra.",
-    "based on files_zenodo written by Lars Næsbye Christensen, DeIC" : "A files_zenodo alapján írta Lars Næsbye Christensen, DeIC"
+    "based on files_zenodo written by Lars Næsbye Christensen, DeIC" : "A files_zenodo alapján írta Lars Næsbye Christensen, DeIC",
+    "Sandbox Token" : "Sandbox Token"
 },
 "nplurals=2; plural=(n != 1);");
