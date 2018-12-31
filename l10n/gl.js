@@ -8,6 +8,6 @@ OC.L10N.register(
     "based on files_zenodo written by Lars Næsbye Christensen, DeIC" : "baseado en «files_zenodo», escrito por Lars Næsbye Christensen, DeIC",
     "Sandbox Token" : "Marca do illamento de procesos",
     "Production Token" : "Marca de produción",
-    "Store Zenodo Credentials" : "Almacenar as credenciais de Zenodo"
+    "Store Zenodo Credentials" : "Almacenar as credenciais do Zenodo"
 },
 "nplurals=2; plural=(n != 1);");
