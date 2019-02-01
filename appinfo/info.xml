@@ -5,7 +5,7 @@
 	<name>Zenodo</name>
 	<summary>Publish your work to Zenodo.org</summary>
 	<description>based on files_zenodo written by Lars Næsbye Christensen, DeIC</description>
-	<version>1.0.0</version>
+	<version>1.1.0</version>
 	<licence>agpl</licence>
 	<author>Maxence Lange</author>
 	<author>Lars Næsbye Christensen</author>
@@ -19,6 +19,6 @@
 	<repository type="git">https://github.com/nextcloud/zenodo.git</repository>
 	<screenshot>https://raw.githubusercontent.com/nextcloud/zenodo/master/screenshots/dialogpopup.png</screenshot>
 	<dependencies>
-		<nextcloud min-version="14" max-version="14"/>
+		<nextcloud min-version="14" max-version="16"/>
 	</dependencies>
 </info>

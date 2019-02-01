@@ -1,17 +1,37 @@
 app_name=zenodo
 
-project_dir=$(CURDIR)/../$(app_name)
+project_dir=$(CURDIR)
 build_dir=$(CURDIR)/build/artifacts
 appstore_dir=$(build_dir)/appstore
 source_dir=$(build_dir)/source
 sign_dir=$(build_dir)/sign
 package_name=$(app_name)
 cert_dir=$(HOME)/.nextcloud/certificates
-version+=1.0.0
+github_account=nextcloud
+branch=master
+codecov_token_dir=$(HOME)/.nextcloud/codecov_token
+version+=1.1.0
 
 all: appstore
 
-release: appstore create-tag
+release: appstore github-release github-upload
+
+github-release:
+	github-release release \
+		--user $(github_account) \
+		--repo $(app_name) \
+		--target $(branch) \
+		--tag v$(version) \
+		--name "$(app_name) v$(version)"
+
+github-upload:
+	github-release upload \
+		--user $(github_account) \
+		--repo $(app_name) \
+		--tag v$(version) \
+		--name "$(app_name)-$(version).tar.gz" \
+		--file $(build_dir)/$(app_name)-$(version).tar.gz
+
 
 create-tag:
 	git tag -s -a v$(version) -m "Tagging the $(version) release."
@@ -47,3 +67,4 @@ appstore: clean
 		echo "Signing package…"; \
 		openssl dgst -sha512 -sign $(cert_dir)/$(app_name).key $(build_dir)/$(app_name)-$(version).tar.gz | openssl base64; \
 	fi
+
