@@ -7,6 +7,7 @@ OC.L10N.register(
     "Publish your work to Zenodo.org" : "Publicera ditt arbete till Zenodo.org",
     "based on files_zenodo written by Lars Næsbye Christensen, DeIC" : "baserat på files_zenodo skriven av Lars Næsbye Christensen, DeIC",
     "Sandbox Token" : "Sandbox-token",
-    "Production Token" : "Produktionstoken"
+    "Production Token" : "Produktionstoken",
+    "Store Zenodo Credentials" : "Spara Zenodoreferenser"
 },
 "nplurals=2; plural=(n != 1);");
