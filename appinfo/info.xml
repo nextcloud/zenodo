@@ -19,6 +19,6 @@
 	<repository type="git">https://github.com/nextcloud/zenodo.git</repository>
 	<screenshot>https://raw.githubusercontent.com/nextcloud/zenodo/master/screenshots/dialogpopup.png</screenshot>
 	<dependencies>
-		<nextcloud min-version="14" max-version="16"/>
+		<nextcloud min-version="14" max-version="20"/>
 	</dependencies>
 </info>
