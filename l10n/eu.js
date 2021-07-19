@@ -8,6 +8,6 @@ OC.L10N.register(
     "based on files_zenodo written by Lars Næsbye Christensen, DeIC" : "files_zenodo-n oinarrituta Lars Næsbye Christensen, DeIC-ek idatzita",
     "Sandbox Token" : "Sandbox-en Token-a",
     "Production Token" : "Produkzio Tokena",
-    "Store Zenodo Credentials" : "Gorde Zenodo kredentzialak"
+    "Store Zenodo Credentials" : "Biltegiratu Zenodo kredentzialak"
 },
 "nplurals=2; plural=(n != 1);");
