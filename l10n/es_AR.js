@@ -10,4 +10,4 @@ OC.L10N.register(
     "Production Token" : "Ficha de producción",
     "Store Zenodo Credentials" : "Tienda de credenciales de Zenodo"
 },
-"nplurals=2; plural=(n != 1);");
+"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
