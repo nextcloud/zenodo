@@ -7,5 +7,5 @@
     "Sandbox Token" : "אסימון ארגז חול",
     "Production Token" : "אסימון סביבת פעילות מלאה (פרודקשן)",
     "Store Zenodo Credentials" : "אחסון פרטי הגישה ל־Zenodo"
-},"pluralForm" :"nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;"
+},"pluralForm" :"nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;"
 }
