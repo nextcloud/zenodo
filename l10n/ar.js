@@ -1,7 +1,7 @@
 OC.L10N.register(
     "zenodo",
     {
-    "Create a new deposition" : "إنشاء مستودعٍ جديدٍ",
+    "Create a new deposition" : "إنشاء مستودع جديد",
     "Add this file to a deposition" : "أضِف هذا الملف إلى المستودع",
     "Zenodo" : "زينودو Zenodo",
     "Publish your work to Zenodo.org" : "أُنشر عملك في Zenodo.org",
