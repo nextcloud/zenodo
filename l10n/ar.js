@@ -2,7 +2,7 @@ OC.L10N.register(
     "zenodo",
     {
     "Create a new deposition" : "إنشاء مستودع جديد",
-    "Add this file to a deposition" : "أضِف هذا الملف إلى المستودع",
+    "Add this file to a deposition" : "إضافة هذا الملف إلى المستودع",
     "Zenodo" : "زينودو Zenodo",
     "Publish your work to Zenodo.org" : "أُنشر عملك في Zenodo.org",
     "based on files_zenodo written by Lars Næsbye Christensen, DeIC" : "إستناداً إلى files_zenodo كتبها Lars Næsbye Christensen, DeIC",
