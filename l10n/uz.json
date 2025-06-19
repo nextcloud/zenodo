@@ -1,0 +1,11 @@
+{ "translations": {
+    "Create a new deposition" : "Yangi depozit yarating",
+    "Add this file to a deposition" : "Ushbu faylni depozitga qo'shing",
+    "Zenodo" : "Zenodo",
+    "Publish your work to Zenodo.org" : "Ishingizni Zenodo.org saytida nashr eting",
+    "based on files_zenodo written by Lars Næsbye Christensen, DeIC" : "Lars Næsbye Christensen, DeIC tomonidan yozilgan files_zenodo asosida",
+    "Sandbox Token" : "Sandbox tokeni",
+    "Production Token" : "Ishlab chiqarish tokeni",
+    "Store Zenodo Credentials" : "Zenodo akkaunt ma'lumotlarini saqlang"
+},"pluralForm" :"nplurals=1; plural=0;"
+}
