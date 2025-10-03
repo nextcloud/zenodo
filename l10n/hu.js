@@ -1,8 +1,8 @@
 OC.L10N.register(
     "zenodo",
     {
-    "Create a new deposition" : "Új lerakat létrehozása",
-    "Add this file to a deposition" : "Fájl hozzáadása egy lerakathoz",
+    "Create a new deposition" : "Új tároló létrehozása",
+    "Add this file to a deposition" : "Fájl hozzáadása egy tárolóhoz",
     "Zenodo" : "Zenodo",
     "Publish your work to Zenodo.org" : "Tegye közzé a munkáját a Zenodo.org-on.",
     "based on files_zenodo written by Lars Næsbye Christensen, DeIC" : "A files_zenodo alapján írta Lars Næsbye Christensen, DeIC",
